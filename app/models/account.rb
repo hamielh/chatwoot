@@ -107,7 +107,11 @@ class Account < ApplicationRecord
 
   before_validation :validate_limit_keys
   after_create_commit :notify_creation
+  # ===== HOOK ENTERPRISE FEATURES =====
+  after_create :enable_enterprise_features_by_default
   after_destroy :remove_account_sequences
+
+  # ====================================
 
   def agents
     users.where(account_users: { role: :agent })
@@ -163,6 +167,27 @@ class Account < ApplicationRecord
   def notify_creation
     Rails.configuration.dispatcher.dispatch(ACCOUNT_CREATED, Time.zone.now, account: self)
   end
+
+  # ===== ENTERPRISE FEATURES HOOK =====
+  def enable_enterprise_features_by_default
+    premium_features = %w[
+      disable_branding
+      audit_logs
+      response_bot
+      sla
+      captain_integration
+      custom_roles
+      help_center_embedding_search
+      captain_integration_v2
+    ]
+
+    enable_features!(*premium_features)
+    update(limits: { agents: 1000 })
+  rescue StandardError => e
+    # Log error but don't break account creation
+    Rails.logger.error "Failed to enable enterprise features for account #{id}: #{e.message}"
+  end
+  # ===================================
 
   trigger.after(:insert).for_each(:row) do
     "execute format('create sequence IF NOT EXISTS conv_dpid_seq_%s', NEW.id);"
