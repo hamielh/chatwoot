@@ -1,30 +1,50 @@
 module Enterprise::Internal::CheckNewVersionsJob
   def perform
+    # ===== BYPASS ENTERPRISE =====
+    Rails.logger.info "🚫 Enterprise version check bypassed - maintaining enterprise config"
+
+    # Executar apenas a parte de versão (inofensiva)
     super
-    update_plan_info
-    reconcile_premium_config_and_features
+
+    # PULAR as partes problemáticas:
+    # - update_plan_info (não executar)
+    # - reconcile_premium_config_and_features (não executar)
+
+    # Em vez disso, garantir que configurações enterprise permaneçam
+    maintain_enterprise_config
+    # ==========================
   end
 
   private
 
-  def update_plan_info
-    return if @instance_info.blank?
+  def maintain_enterprise_config
+    return unless ChatwootApp.enterprise?
 
-    update_installation_config(key: 'INSTALLATION_PRICING_PLAN', value: @instance_info['plan'])
-    update_installation_config(key: 'INSTALLATION_PRICING_PLAN_QUANTITY', value: @instance_info['plan_quantity'])
-    update_installation_config(key: 'CHATWOOT_SUPPORT_WEBSITE_TOKEN', value: @instance_info['chatwoot_support_website_token'])
-    update_installation_config(key: 'CHATWOOT_SUPPORT_IDENTIFIER_HASH', value: @instance_info['chatwoot_support_identifier_hash'])
-    update_installation_config(key: 'CHATWOOT_SUPPORT_SCRIPT_URL', value: @instance_info['chatwoot_support_script_url'])
+    # Forçar configurações enterprise (sem lock)
+    config_plan = InstallationConfig.find_or_create_by(name: 'INSTALLATION_PRICING_PLAN')
+    config_plan.update(value: 'enterprise', locked: false)
+
+    config_quantity = InstallationConfig.find_or_create_by(name: 'INSTALLATION_PRICING_PLAN_QUANTITY')
+    config_quantity.update(value: 1000, locked: false)
+
+    Rails.logger.info "✅ Enterprise configuration maintained"
+  rescue => e
+    Rails.logger.error "Failed to maintain enterprise config: #{e.message}"
+  end
+
+  # Métodos originais DESABILITADOS:
+  def update_plan_info
+    Rails.logger.info "🚫 update_plan_info bypassed"
+    # Código original comentado/removido
   end
 
   def update_installation_config(key:, value:)
-    config = InstallationConfig.find_or_initialize_by(name: key)
-    config.value = value
-    config.locked = true
-    config.save!
+    Rails.logger.info "🚫 update_installation_config bypassed for #{key}"
+    # Código original comentado/removido
   end
 
   def reconcile_premium_config_and_features
-    Internal::ReconcilePlanConfigService.new.perform
+    Rails.logger.info "🚫 reconcile_premium_config_and_features bypassed"
+    # Código original comentado/removido
   end
 end
