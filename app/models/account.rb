@@ -171,20 +171,22 @@ class Account < ApplicationRecord
   # ===== ENTERPRISE FEATURES HOOK =====
   def enable_enterprise_features_by_default
     premium_features = %w[
-      disable_branding
-      audit_logs
-      response_bot
-      sla
-      captain_integration
-      custom_roles
-      help_center_embedding_search
+      disable_branding audit_logs response_bot sla
+      captain_integration custom_roles help_center_embedding_search
       captain_integration_v2
     ]
 
+    # Ativar features da conta
     enable_features!(*premium_features)
     update(limits: { agents: 1000 })
+
+    # ===== ADIÇÃO: GARANTIR CONFIGS GLOBAIS =====
+    # Forçar configurações enterprise toda vez que conta é criada
+    InstallationConfig.find_or_create_by(name: 'INSTALLATION_PRICING_PLAN').update(value: 'enterprise')
+    InstallationConfig.find_or_create_by(name: 'INSTALLATION_PRICING_PLAN_QUANTITY').update(value: 1000)
+    # ==========================================
+
   rescue StandardError => e
-    # Log error but don't break account creation
     Rails.logger.error "Failed to enable enterprise features for account #{id}: #{e.message}"
   end
   # ===================================
