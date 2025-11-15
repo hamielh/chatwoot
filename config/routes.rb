@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get '/super_admin/settings/refresh', to: redirect('/super_admin/settings')
+
   # AUTH STARTS
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
     confirmations: 'devise_overrides/confirmations',

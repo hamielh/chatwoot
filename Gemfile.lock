@@ -971,7 +971,7 @@ GEM
     working_hours (1.4.1)
       activesupport (>= 3.2)
       tzinfo
-    zeitwerk (2.6.17)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   arm64-darwin-20
