@@ -16,6 +16,7 @@ class WhatsappApi::IncomingMessageService
     process_attachments if attachment?
     @message.save!
     set_attachment_metadata if attachment?
+    mark_previous_messages_as_read unless from_me?
   end
 
   private
@@ -73,9 +74,13 @@ class WhatsappApi::IncomingMessageService
     return if @contact.avatar.attached?
 
     phone = phone_number.gsub(/\D/, '')
+    original_phone = phone.dup
 
     # Remove o 9º dígito se for celular brasileiro (formato: 55 + DDD + 9 + 8 dígitos)
     phone = phone[0..3] + phone[5..] if phone.start_with?('55') && phone.length == 13 && phone[4] == '9'
+
+    Rails.logger.info "[Avatar] Buscando avatar para contato #{@contact.id}"
+    Rails.logger.info "[Avatar] Telefone original: #{original_phone} -> Ajustado: #{phone}"
 
     base_url = ENV.fetch('QUEPASA_API_URL', 'https://pixel-quepasa.f7unst.easypanel.host')
     token = inbox.channel.provider_config['token']
@@ -87,6 +92,9 @@ class WhatsappApi::IncomingMessageService
       },
       timeout: 10
     )
+
+    Rails.logger.info "[Avatar] Response HTTP: #{response.code}, success: #{response['success']}"
+    Rails.logger.info "[Avatar] Response body: #{response.body[0..200]}"
 
     if response.success? && response['success']
       avatar_url = response.dig('info', 'url')
@@ -173,7 +181,7 @@ class WhatsappApi::IncomingMessageService
       message_type: message_type,
       sender: message_sender,
       source_id: message_params['id'] || message_params[:id],
-      status: :sent
+      status: from_me? ? :delivered : :sent
     }
 
     if replied_message_id.present?
@@ -352,5 +360,34 @@ class WhatsappApi::IncomingMessageService
     when 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' then '.xlsx'
     else '.bin'
     end
+  end
+
+  def mark_previous_messages_as_read
+    # Quando o cliente responde, marca todas as mensagens outgoing (enviadas pelo agente)
+    # que ainda não foram lidas como "read" (checks azuis)
+    Rails.logger.info '[ReadReceipt] Cliente respondeu! Marcando mensagens anteriores como lidas...'
+
+    messages_to_update = @conversation.messages
+                                      .where(message_type: :outgoing)
+                                      .where.not(status: :read)
+                                      .where('created_at < ?', @message.created_at)
+
+    count = messages_to_update.count
+    Rails.logger.info "[ReadReceipt] Encontradas #{count} mensagens para marcar como lidas"
+
+    if count > 0
+      # Usa update individual para disparar callbacks e eventos WebSocket
+      messages_to_update.find_each do |msg|
+        Rails.logger.info "[ReadReceipt] Marcando mensagem ID #{msg.id} como READ"
+        msg.update!(status: :read)
+      end
+
+      Rails.logger.info "[ReadReceipt] #{count} mensagens marcadas como READ (checks azuis) com eventos disparados"
+    else
+      Rails.logger.info '[ReadReceipt] Nenhuma mensagem para atualizar'
+    end
+  rescue StandardError => e
+    Rails.logger.error "[ReadReceipt] Failed to mark messages as read: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
   end
 end
