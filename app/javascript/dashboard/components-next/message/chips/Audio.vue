@@ -5,6 +5,7 @@ import {
   useTemplateRef,
   ref,
   getCurrentInstance,
+  watch,
 } from 'vue';
 import Icon from 'next/icon/Icon.vue';
 import { timeStampAppendedURL } from 'dashboard/helper/URLHelper';
@@ -58,8 +59,21 @@ onMounted(() => {
   } else {
     duration.value = audioPlayer.value?.duration;
   }
-  audioPlayer.value.playbackRate = playbackSpeed.value;
+  if (audioPlayer.value) {
+    audioPlayer.value.playbackRate = playbackSpeed.value;
+  }
 });
+
+// Watch for changes in attachment duration (for messages that arrive via WebSocket)
+watch(
+  () => attachment.duration,
+  newDuration => {
+    if (newDuration) {
+      duration.value = newDuration;
+    }
+  },
+  { immediate: true }
+);
 
 // Listen for global audio play events and pause if it's not this audio
 useEmitter('pause_playing_audio', currentPlayingId => {
