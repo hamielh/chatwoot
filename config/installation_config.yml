@@ -451,3 +451,47 @@
   locked: false
   description: 'Token expiry in days'
 ## ------ End of Customizations for Customers ------ ##
+
+## ------ WhatsApp API Integrations ------ ##
+  display_title: 'Evolution API URL'
+  value:
+  locked: false
+  description: 'The base URL of your Evolution API instance (e.g., https://evolution-api.example.com)'
+  display_title: 'Evolution API Key'
+  value:
+  locked: false
+  description: 'The API Key for authenticating with Evolution API'
+  type: secret
+- name: QUEPASA_API_URL
+  display_title: 'Quepasa API URL'
+  value:
+  locked: false
+  description: 'The base URL of your Quepasa API instance (e.g., https://quepasa.example.com)'
+- name: QUEPASA_API_TOKEN
+  display_title: 'Quepasa API Token'
+  value:
+  locked: false
+  description: 'The authentication token for Quepasa API'
+  type: secret
+## ------ End of WhatsApp API Integrations ------ ##
+  display_title: 'WhatsApp API Provider'
+  value: 'evolution_api'
+  locked: false
+  description: 'Choose which WhatsApp API provider to use (evolution_api or quepasa_api)'
+  type: select
+  options:
+    evolution_api: 'Evolution API'
+    quepasa_api: 'Quepasa API'
+
+## ------ Quepasa WhatsApp API ------ ##
+- name: QUEPASA_API_URL
+  display_title: 'Quepasa API URL'
+  value:
+  locked: false
+  description: 'The base URL of your Quepasa API instance (e.g., http://localhost:31000)'
+- name: QUEPASA_API_USER
+  display_title: 'Quepasa API User'
+  value:
+  locked: false
+  description: 'The default user for Quepasa API authentication'
+## ------ End of Quepasa ------ ##

@@ -132,3 +132,9 @@ shopify:
   enabled: true
   icon: 'icon-shopify'
   config_key: 'shopify'
+quepasa:
+  name: 'Quepasa'
+  description: 'Configuration for WhatsApp API via Quepasa'
+  enabled: true
+  icon: 'icon-whatsapp-line'
+  config_key: 'quepasa'

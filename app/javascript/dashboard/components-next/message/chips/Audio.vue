@@ -38,7 +38,10 @@ const playbackSpeed = ref(1);
 const { uid } = getCurrentInstance();
 
 const onLoadedMetadata = () => {
-  duration.value = audioPlayer.value?.duration;
+  // Use duration from backend if available, otherwise use audio element duration
+  if (!duration.value) {
+    duration.value = audioPlayer.value?.duration;
+  }
 };
 
 const playbackSpeedLabel = computed(() => {
@@ -49,7 +52,12 @@ const playbackSpeedLabel = computed(() => {
 // When the onLoadMetadata is called, so we need to set the duration
 // value when the component is mounted
 onMounted(() => {
-  duration.value = audioPlayer.value?.duration;
+  // Prefer backend duration over audio element duration
+  if (attachment.duration) {
+    duration.value = attachment.duration;
+  } else {
+    duration.value = audioPlayer.value?.duration;
+  }
   audioPlayer.value.playbackRate = playbackSpeed.value;
 });
 

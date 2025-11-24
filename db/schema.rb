@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_22_152158) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_15_215501) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -568,6 +568,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_22_152158) do
     t.jsonb "message_templates", default: {}
     t.datetime "message_templates_last_updated", precision: nil
     t.index ["phone_number"], name: "index_channel_whatsapp_on_phone_number", unique: true
+  end
+
+  create_table "channel_whatsapp_api", force: :cascade do |t|
+    t.string "phone_number"
+    t.jsonb "provider_config", default: {}
+    t.integer "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_channel_whatsapp_api_on_account_id"
+    t.index ["phone_number"], name: "index_channel_whatsapp_api_on_phone_number", unique: true
   end
 
   create_table "companies", force: :cascade do |t|
