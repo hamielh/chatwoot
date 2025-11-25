@@ -1,0 +1,8 @@
+json.id chat_agent.id
+json.title chat_agent.title
+json.icon chat_agent.icon
+json.webhook_url chat_agent.webhook_url
+json.description chat_agent.description
+json.allowed_roles chat_agent.allowed_roles
+json.position chat_agent.position
+json.enabled chat_agent.enabled

@@ -21,6 +21,13 @@ const integrationList = computed(() => {
         'Add custom applications to the sidebar for quick access to external tools and integrations.',
       enabled: true,
     },
+    {
+      id: 'chat_agents',
+      name: 'Chat Agents',
+      description:
+        'Create AI-powered chat agents that connect to external APIs via webhooks for automated conversations.',
+      enabled: true,
+    },
   ];
   return [...staticApps, ...getters['integrations/getAppIntegrations'].value];
 });

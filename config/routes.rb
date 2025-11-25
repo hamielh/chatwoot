@@ -110,6 +110,12 @@ Rails.application.routes.draw do
           resources :campaigns, only: [:index, :create, :show, :update, :destroy]
           resources :dashboard_apps, only: [:index, :show, :create, :update, :destroy]
           resources :sidebar_apps, only: [:index, :show, :create, :update, :destroy]
+          resources :chat_agents, only: [:index, :show, :create, :update, :destroy] do
+            scope module: :chat_agents do
+              resources :messages, only: [:index, :create]
+              delete 'messages', to: 'messages#destroy_all'
+            end
+          end
           namespace :channels do
             resource :twilio_channel, only: [:create]
             resources :whatsapp_api, only: [] do

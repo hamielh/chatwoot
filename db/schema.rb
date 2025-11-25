@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_24_204238) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_25_014218) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -578,6 +578,37 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_24_204238) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_channel_whatsapp_api_on_account_id"
     t.index ["phone_number"], name: "index_channel_whatsapp_api_on_phone_number", unique: true
+  end
+
+  create_table "chat_agent_messages", force: :cascade do |t|
+    t.text "content", null: false
+    t.string "role", null: false
+    t.bigint "chat_agent_id", null: false
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_chat_agent_messages_on_account_id"
+    t.index ["chat_agent_id", "created_at"], name: "index_chat_agent_messages_on_chat_agent_id_and_created_at"
+    t.index ["chat_agent_id"], name: "index_chat_agent_messages_on_chat_agent_id"
+    t.index ["user_id"], name: "index_chat_agent_messages_on_user_id"
+  end
+
+  create_table "chat_agents", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "icon", default: "i-lucide-bot"
+    t.string "webhook_url", null: false
+    t.text "description"
+    t.text "allowed_roles", default: [], array: true
+    t.integer "position", default: 0, null: false
+    t.boolean "enabled", default: true
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "position"], name: "index_chat_agents_on_account_id_and_position"
+    t.index ["account_id"], name: "index_chat_agents_on_account_id"
+    t.index ["user_id"], name: "index_chat_agents_on_user_id"
   end
 
   create_table "companies", force: :cascade do |t|
@@ -1277,6 +1308,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_24_204238) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chat_agent_messages", "accounts"
+  add_foreign_key "chat_agent_messages", "chat_agents"
+  add_foreign_key "chat_agent_messages", "users"
+  add_foreign_key "chat_agents", "accounts"
+  add_foreign_key "chat_agents", "users"
   add_foreign_key "inboxes", "portals"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").

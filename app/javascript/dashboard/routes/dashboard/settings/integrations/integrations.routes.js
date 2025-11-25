@@ -6,6 +6,7 @@ import Index from './Index.vue';
 import Webhook from './Webhooks/Index.vue';
 import DashboardApps from './DashboardApps/Index.vue';
 import CustomApps from '../apps/CustomApps/Index.vue';
+import ChatAgents from '../chatAgents/Index.vue';
 import Slack from './Slack.vue';
 import SettingsContent from '../Wrapper.vue';
 import Linear from './Linear.vue';
@@ -41,6 +42,14 @@ export default {
           path: 'custom_apps',
           component: CustomApps,
           name: 'settings_apps_custom',
+          meta: {
+            permissions: ['administrator'],
+          },
+        },
+        {
+          path: 'chat_agents',
+          component: ChatAgents,
+          name: 'settings_chat_agents',
           meta: {
             permissions: ['administrator'],
           },
