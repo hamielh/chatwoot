@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { useStore } from 'dashboard/composables/store';
 import Button from 'dashboard/components-next/button/Button.vue';
-import ButtonGroup from 'dashboard/components-next/button/ButtonGroup.vue';
 
 const store = useStore();
 
@@ -32,9 +31,7 @@ const toggleChatAgent = () => {
     v-if="showLauncher"
     class="fixed bottom-20 ltr:right-4 rtl:left-4 z-50"
   >
-    <ButtonGroup
-      class="rounded-full bg-n-alpha-2 backdrop-blur-lg p-1 shadow hover:shadow-md"
-    >
+    <div class="rounded-full bg-n-alpha-2 backdrop-blur-lg p-1 shadow hover:shadow-md">
       <Button
         icon="i-lucide-bot"
         no-animation
@@ -42,6 +39,6 @@ const toggleChatAgent = () => {
         lg
         @click="toggleChatAgent"
       />
-    </ButtonGroup>
+    </div>
   </div>
 </template>
