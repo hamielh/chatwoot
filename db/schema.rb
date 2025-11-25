@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_15_215501) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_24_204238) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -1113,6 +1113,21 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_15_215501) do
     t.index ["inbox_id"], name: "index_reporting_events_on_inbox_id"
     t.index ["name"], name: "index_reporting_events_on_name"
     t.index ["user_id"], name: "index_reporting_events_on_user_id"
+  end
+
+  create_table "sidebar_apps", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "url", null: false
+    t.bigint "account_id", null: false
+    t.bigint "user_id"
+    t.text "allowed_roles", default: [], array: true
+    t.string "display_location", default: "apps_menu", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "icon", default: "i-lucide-app-window"
+    t.index ["account_id"], name: "index_sidebar_apps_on_account_id"
+    t.index ["user_id"], name: "index_sidebar_apps_on_user_id"
   end
 
   create_table "sla_events", force: :cascade do |t|

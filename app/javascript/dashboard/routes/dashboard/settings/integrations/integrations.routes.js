@@ -5,6 +5,7 @@ import IntegrationHooks from './IntegrationHooks.vue';
 import Index from './Index.vue';
 import Webhook from './Webhooks/Index.vue';
 import DashboardApps from './DashboardApps/Index.vue';
+import CustomApps from '../apps/CustomApps/Index.vue';
 import Slack from './Slack.vue';
 import SettingsContent from '../Wrapper.vue';
 import Linear from './Linear.vue';
@@ -33,6 +34,14 @@ export default {
           name: 'settings_integrations_dashboard_apps',
           meta: {
             featureFlag: FEATURE_FLAGS.INTEGRATIONS,
+            permissions: ['administrator'],
+          },
+        },
+        {
+          path: 'custom_apps',
+          component: CustomApps,
+          name: 'settings_apps_custom',
+          meta: {
             permissions: ['administrator'],
           },
         },

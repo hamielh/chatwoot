@@ -12,9 +12,18 @@ const { replaceInstallationName } = useBranding();
 
 const uiFlags = getters['integrations/getUIFlags'];
 
-const integrationList = computed(
-  () => getters['integrations/getAppIntegrations'].value
-);
+const integrationList = computed(() => {
+  const staticApps = [
+    {
+      id: 'custom_apps',
+      name: 'Custom Apps',
+      description:
+        'Add custom applications to the sidebar for quick access to external tools and integrations.',
+      enabled: true,
+    },
+  ];
+  return [...staticApps, ...getters['integrations/getAppIntegrations'].value];
+});
 
 onMounted(() => {
   store.dispatch('integrations/get');

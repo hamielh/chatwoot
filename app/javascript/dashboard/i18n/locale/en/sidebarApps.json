@@ -1,0 +1,71 @@
+{
+  "SIDEBAR_APPS": {
+    "TITLE": "Custom Apps",
+    "HEADER_BTN_TXT": "Add Custom App",
+    "DESCRIPTION": "Custom Apps allow you to embed external applications directly in the Chatwoot sidebar. These apps can provide additional functionality and integrations for your team.",
+    "LEARN_MORE": "Learn more about Custom Apps",
+    "LOADING_MESSAGE": "Loading app...",
+    "APP_NOT_FOUND": "App not found",
+    "LOCATION": {
+      "ROOT": "Root Sidebar",
+      "APPS_MENU": "Apps Menu"
+    },
+    "LIST": {
+      "404": "No custom apps configured yet",
+      "LOADING": "Loading custom apps...",
+      "TABLE_HEADER": {
+        "NAME": "Name",
+        "URL": "URL",
+        "LOCATION": "Location"
+      }
+    },
+    "FORM": {
+      "TITLE_LABEL": "App Name",
+      "TITLE_PLACEHOLDER": "Enter app name",
+      "TITLE_ERROR": "App name is required",
+      "URL_LABEL": "App URL",
+      "URL_PLACEHOLDER": "https://your-app.com",
+      "URL_ERROR": "A valid URL is required",
+      "ICON_LABEL": "App Icon",
+      "ICON_HELP": "Select an icon to represent your app in the sidebar",
+      "LOCATION_LABEL": "Display Location",
+      "LOCATION_HELP": "Choose where the app appears: directly in the main sidebar or inside the Apps submenu",
+      "LOCATION_ROOT": "Main Sidebar",
+      "LOCATION_APPS_MENU": "Apps Submenu",
+      "POSITION_LABEL": "Position",
+      "POSITION_PLACEHOLDER": "0",
+      "POSITION_ERROR": "Position must be a number greater than or equal to 0",
+      "ROLES_LABEL": "Allowed Roles",
+      "ROLES_HELP": "Leave empty to allow all roles, or select specific roles that can see this app"
+    },
+    "CREATE": {
+      "HEADER": "Add Custom App",
+      "FORM_SUBMIT": "Create App",
+      "FORM_CANCEL": "Cancel",
+      "API_SUCCESS": "Custom app created successfully",
+      "API_ERROR": "Failed to create app. Please try again"
+    },
+    "UPDATE": {
+      "HEADER": "Edit Custom App",
+      "FORM_SUBMIT": "Update App",
+      "FORM_CANCEL": "Cancel",
+      "API_SUCCESS": "Custom app updated successfully",
+      "API_ERROR": "Failed to update app. Please try again"
+    },
+    "DELETE": {
+      "TITLE": "Delete Custom App",
+      "MESSAGE": "Are you sure you want to delete {appName}? This action cannot be undone.",
+      "CONFIRM_YES": "Yes, Delete",
+      "CONFIRM_NO": "Cancel",
+      "API_SUCCESS": "Custom app deleted successfully",
+      "API_ERROR": "Failed to delete app. Please try again",
+      "BUTTON_TEXT": "Delete"
+    },
+    "EDIT": {
+      "BUTTON_TEXT": "Edit"
+    }
+  },
+  "SETTINGS_APPS": {
+    "HEADER": "Apps"
+  }
+}
