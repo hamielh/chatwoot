@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import * as MutationHelpers from 'shared/helpers/vuex/mutationHelpers';
 import types from '../mutation-types';
 import ChatAgentsAPI from '../../api/chatAgents';
@@ -140,16 +139,16 @@ export const mutations = {
   [types.DELETE_CHAT_AGENT]: MutationHelpers.destroy,
 
   [types.SET_CHAT_AGENT_MESSAGES](_state, { agentId, messages }) {
-    Vue.set(_state.messages, agentId, messages);
+    _state.messages[agentId] = messages;
   },
 
   [types.ADD_CHAT_AGENT_MESSAGES](_state, { agentId, messages }) {
     const currentMessages = _state.messages[agentId] || [];
-    Vue.set(_state.messages, agentId, [...currentMessages, ...messages]);
+    _state.messages[agentId] = [...currentMessages, ...messages];
   },
 
   [types.CLEAR_CHAT_AGENT_MESSAGES](_state, agentId) {
-    Vue.set(_state.messages, agentId, []);
+    _state.messages[agentId] = [];
   },
 
   [types.SET_SELECTED_CHAT_AGENT](_state, agentId) {
