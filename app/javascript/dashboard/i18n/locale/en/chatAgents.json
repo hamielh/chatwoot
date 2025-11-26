@@ -1,11 +1,14 @@
 {
   "CHAT_AGENTS": {
     "TITLE": "Chat Agents",
+    "LEARN_MORE": "Learn more",
+    "LOADING": "Loading chat agents...",
     "CLOSE": "Close",
     "CLEAR_HISTORY": "Clear history",
     "SELECT_AGENT": "Select an agent",
     "EMPTY_STATE": "Start a conversation by sending a message",
     "INPUT_PLACEHOLDER": "Type your message...",
+    "TYPING": "Agent is typing...",
     "HEADER": {
       "TITLE": "Chat Agents",
       "DESCRIPTION": "Create and manage AI-powered chat agents that connect to external APIs via webhooks.",
@@ -21,7 +24,7 @@
       "ENABLED": "Enabled",
       "DISABLED": "Disabled"
     },
-    "EMPTY_STATE": {
+    "LIST_EMPTY_STATE": {
       "TITLE": "No chat agents yet",
       "DESCRIPTION": "Create your first chat agent to start having automated conversations powered by external APIs and AI services.",
       "ADD_BUTTON": "Create Your First Agent"
@@ -38,9 +41,22 @@
       "API_SUCCESS": "Chat agent updated successfully",
       "API_ERROR": "Failed to update chat agent"
     },
+    "create": {
+      "TITLE": "Create Chat Agent",
+      "API_SUCCESS": "Chat agent created successfully",
+      "API_ERROR": "Failed to create chat agent"
+    },
+    "update": {
+      "TITLE": "Update Chat Agent",
+      "API_SUCCESS": "Chat agent updated successfully",
+      "API_ERROR": "Failed to update chat agent"
+    },
     "DELETE": {
       "BUTTON_TEXT": "Delete",
+      "TITLE": "Delete Chat Agent",
       "CONFIRM": "Are you sure you want to delete {name}?",
+      "CONFIRM_YES": "Yes, Delete",
+      "CONFIRM_NO": "Cancel",
       "SUCCESS": "Chat agent deleted successfully",
       "ERROR": "Failed to delete chat agent"
     },
@@ -64,6 +80,12 @@
       "POSITION_HELP": "Lower numbers appear first in the agent selector",
       "ROLES_LABEL": "Allowed Roles",
       "ROLES_HELP": "Leave empty to allow all roles, or select specific roles that can use this agent",
+      "CALLBACK_URL_LABEL": "Callback URL",
+      "WEBHOOK_TOKEN_LABEL": "Authorization Token",
+      "WEBHOOK_TOKEN_HELP": "Use this token in the Authorization header when calling back: Bearer {token}",
+      "COPY": "Copy to clipboard",
+      "COPIED": "Copied to clipboard!",
+      "COPY_ERROR": "Failed to copy to clipboard",
       "CANCEL": "Cancel"
     },
     "SUCCESS": {

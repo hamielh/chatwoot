@@ -1,5 +1,5 @@
 <script setup>
-import { useStoreGetters, useStore } from 'dashboard/composables/store';
+import { useStoreGetters, useStore, useMapGetter } from 'dashboard/composables/store';
 import { computed, onMounted } from 'vue';
 import { useBranding } from 'shared/composables/useBranding';
 import IntegrationItem from './IntegrationItem.vue';
@@ -9,6 +9,8 @@ import BaseSettingsHeader from '../components/BaseSettingsHeader.vue';
 const store = useStore();
 const getters = useStoreGetters();
 const { replaceInstallationName } = useBranding();
+const currentAccountId = useMapGetter('getCurrentAccountId');
+const isFeatureEnabledonAccount = useMapGetter('accounts/isFeatureEnabledonAccount');
 
 const uiFlags = getters['integrations/getUIFlags'];
 
@@ -29,7 +31,16 @@ const integrationList = computed(() => {
       enabled: true,
     },
   ];
-  return [...staticApps, ...getters['integrations/getAppIntegrations'].value];
+
+  // Filter chat_agents if feature is disabled
+  const filteredStaticApps = staticApps.filter(app => {
+    if (app.id === 'chat_agents') {
+      return isFeatureEnabledonAccount.value(currentAccountId.value, 'chat_agents');
+    }
+    return true;
+  });
+
+  return [...filteredStaticApps, ...getters['integrations/getAppIntegrations'].value];
 });
 
 onMounted(() => {

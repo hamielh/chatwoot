@@ -3,8 +3,8 @@ import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { useStore } from 'dashboard/composables/store';
 import { useI18n } from 'vue-i18n';
 import { useAlert } from 'dashboard/composables';
+import { vOnClickOutside } from '@vueuse/components';
 import Button from 'dashboard/components-next/button/Button.vue';
-import SelectMenu from 'dashboard/components-next/selectmenu/SelectMenu.vue';
 import TextArea from 'dashboard/components-next/textarea/TextArea.vue';
 
 const store = useStore();
@@ -12,6 +12,7 @@ const { t } = useI18n();
 
 const messageInput = ref('');
 const messagesContainer = ref(null);
+const isDropdownOpen = ref(false);
 
 const isOpen = computed(() => store.getters['chatAgentUI/isOpen']);
 const chatAgents = computed(() => store.getters['chatAgents/getRecords']);
@@ -37,6 +38,22 @@ const availableAgents = computed(() => {
     }));
 });
 
+const scrollToBottom = () => {
+  if (messagesContainer.value) {
+    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+  }
+};
+
+const loadMessages = async agentId => {
+  try {
+    await store.dispatch('chatAgents/fetchMessages', agentId);
+    await nextTick();
+    scrollToBottom();
+  } catch (error) {
+    useAlert(t('CHAT_AGENTS.ERROR.FETCH_MESSAGES'));
+  }
+};
+
 const selectedAgent = computed({
   get: () => {
     if (!selectedAgentId.value) return null;
@@ -50,18 +67,29 @@ const selectedAgent = computed({
   },
 });
 
-const closeSidebar = () => {
-  store.dispatch('chatAgentUI/close');
+const headerTitle = computed(() => {
+  if (selectedAgent.value) {
+    return selectedAgent.value.label;
+  }
+  return t('CHAT_AGENTS.TITLE');
+});
+
+const headerIconClass = computed(() => {
+  const icon = selectedAgent.value?.icon || 'i-lucide-bot';
+  return `${icon} text-xl text-n-slate-11`;
+});
+
+const toggleDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
 };
 
-const loadMessages = async agentId => {
-  try {
-    await store.dispatch('chatAgents/fetchMessages', agentId);
-    await nextTick();
-    scrollToBottom();
-  } catch (error) {
-    useAlert(t('CHAT_AGENTS.ERROR.FETCH_MESSAGES'));
-  }
+const selectAgent = (agent) => {
+  selectedAgent.value = agent;
+  isDropdownOpen.value = false;
+};
+
+const closeSidebar = () => {
+  store.dispatch('chatAgentUI/close');
 };
 
 const sendMessage = async () => {
@@ -93,10 +121,14 @@ const clearHistory = async () => {
   }
 };
 
-const scrollToBottom = () => {
-  if (messagesContainer.value) {
-    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
-  }
+const formatTime = timestamp => {
+  const date = new Date(timestamp * 1000);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${month} ${day}, ${hours}:${minutes}`;
 };
 
 watch(isOpen, async newValue => {
@@ -109,6 +141,12 @@ watch(isOpen, async newValue => {
   }
 });
 
+// Auto-scroll when new messages arrive
+watch(messages, async () => {
+  await nextTick();
+  scrollToBottom();
+}, { deep: true });
+
 onMounted(() => {
   store.dispatch('chatAgents/get');
 });
@@ -120,14 +158,23 @@ onMounted(() => {
     class="bg-n-background h-full overflow-hidden flex flex-col fixed top-0 ltr:right-0 rtl:left-0 z-40 w-full max-w-sm transition-transform duration-300 ease-in-out md:static md:w-[320px] md:min-w-[320px] ltr:border-l rtl:border-r border-n-weak 2xl:min-w-[360px] 2xl:w-[360px] shadow-lg md:shadow-none"
   >
     <!-- Header -->
-    <div class="flex items-center justify-between p-4 border-b border-n-weak">
+    <div class="flex items-center justify-between p-4 border-b border-n-weak relative">
       <div class="flex items-center gap-2 flex-1">
-        <span class="i-lucide-bot text-xl text-n-slate-11" />
+        <span :class="headerIconClass" />
         <h2 class="text-base font-semibold text-n-slate-12">
-          {{ $t('CHAT_AGENTS.TITLE') }}
+          {{ headerTitle }}
         </h2>
       </div>
+
       <div class="flex items-center gap-1">
+        <Button
+          v-if="availableAgents.length > 0"
+          :icon="isDropdownOpen ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
+          xs
+          slate
+          faded
+          @click="toggleDropdown"
+        />
         <Button
           v-if="selectedAgentId"
           v-tooltip.top="$t('CHAT_AGENTS.CLEAR_HISTORY')"
@@ -147,29 +194,34 @@ onMounted(() => {
           @click="closeSidebar"
         />
       </div>
-    </div>
 
-    <!-- Agent Selector -->
-    <div class="p-4 border-b border-n-weak">
-      <SelectMenu
-        v-model="selectedAgent"
-        :options="availableAgents"
-        :placeholder="$t('CHAT_AGENTS.SELECT_AGENT')"
-        :disabled="availableAgents.length === 0"
+      <!-- Dropdown Menu -->
+      <div
+        v-if="isDropdownOpen"
+        v-on-click-outside="() => isDropdownOpen = false"
+        class="absolute top-full left-0 right-0 mt-1 bg-n-background border border-n-weak rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto mx-4"
       >
-        <template #option="{ option }">
-          <div class="flex items-center gap-2">
-            <span :class="[option.icon, 'text-base']" />
-            <span>{{ option.label }}</span>
-          </div>
-        </template>
-      </SelectMenu>
+        <button
+          v-for="agent in availableAgents"
+          :key="agent.id"
+          class="w-full flex items-center gap-3 px-4 py-3 hover:bg-n-slate-2 transition-colors text-left"
+          :class="{ 'bg-n-slate-3': selectedAgentId === agent.id }"
+          @click="selectAgent(agent)"
+        >
+          <span :class="[agent.icon, 'text-lg text-n-slate-11']" />
+          <span class="text-sm text-n-slate-12 font-medium">{{ agent.label }}</span>
+          <span
+            v-if="selectedAgentId === agent.id"
+            class="i-lucide-check text-base text-woot-500 ml-auto"
+          />
+        </button>
+      </div>
     </div>
 
     <!-- Messages -->
     <div
       ref="messagesContainer"
-      class="flex-1 overflow-y-auto p-4 space-y-3"
+      class="flex-1 overflow-y-auto p-4 space-y-2"
     >
       <div
         v-if="uiFlags.isFetchingMessages"
@@ -188,26 +240,33 @@ onMounted(() => {
         </p>
       </div>
 
-      <div
-        v-else
-        v-for="message in messages"
-        :key="message.id"
-        class="flex"
-        :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
-      >
+      <template v-else>
         <div
-          class="max-w-[80%] rounded-lg px-3 py-2"
+          v-for="message in messages"
+          :key="message.id"
+          class="flex mb-2"
+          :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
+        >
+        <div
+          class="max-w-[75%] px-4 py-2.5 shadow-sm"
           :class="
             message.role === 'user'
-              ? 'bg-primary-600 text-white'
-              : 'bg-n-alpha-3 text-n-slate-12'
+              ? 'bg-woot-500 text-white rounded-2xl rounded-br-md'
+              : 'bg-n-slate-3 text-n-slate-12 rounded-2xl rounded-bl-md'
           "
         >
-          <p class="text-sm whitespace-pre-wrap break-words">
+          <p class="text-sm leading-relaxed whitespace-pre-wrap break-words">
             {{ message.content }}
           </p>
+          <p
+            class="text-xs mt-1 opacity-70"
+            :class="message.role === 'user' ? 'text-right' : 'text-left'"
+          >
+            {{ formatTime(message.created_at) }}
+          </p>
         </div>
-      </div>
+        </div>
+      </template>
     </div>
 
     <!-- Input -->

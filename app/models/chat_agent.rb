@@ -6,9 +6,10 @@
 #  allowed_roles :text             default([]), is an Array
 #  description   :text
 #  enabled       :boolean          default(TRUE)
-#  icon          :string           default("i-lucide-bot")
+#  icon          :string           default("i-lucide-app-window")
 #  position      :integer          default(0), not null
 #  title         :string           not null
+#  webhook_token :string
 #  webhook_url   :string           not null
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
@@ -20,6 +21,7 @@
 #  index_chat_agents_on_account_id               (account_id)
 #  index_chat_agents_on_account_id_and_position  (account_id,position)
 #  index_chat_agents_on_user_id                  (user_id)
+#  index_chat_agents_on_webhook_token            (webhook_token) UNIQUE
 #
 # Foreign Keys
 #

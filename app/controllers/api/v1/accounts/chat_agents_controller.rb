@@ -1,4 +1,5 @@
 class Api::V1::Accounts::ChatAgentsController < Api::V1::Accounts::BaseController
+  before_action :check_chat_agents_feature_enabled
   before_action :fetch_chat_agents, except: [:create]
   before_action :fetch_chat_agent, only: [:show, :update, :destroy]
 
@@ -45,5 +46,11 @@ class Api::V1::Accounts::ChatAgentsController < Api::V1::Accounts::BaseControlle
 
   def permitted_params
     params.permit(:id)
+  end
+
+  def check_chat_agents_feature_enabled
+    return if Current.account.feature_enabled?('chat_agents')
+
+    render json: { error: 'Chat Agents feature is not enabled for this account' }, status: :forbidden
   end
 end

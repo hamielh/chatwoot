@@ -114,6 +114,7 @@ Rails.application.routes.draw do
             scope module: :chat_agents do
               resources :messages, only: [:index, :create]
               delete 'messages', to: 'messages#destroy_all'
+              post 'callback', to: 'messages#callback'
             end
           end
           namespace :channels do

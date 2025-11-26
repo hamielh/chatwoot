@@ -1,6 +1,6 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
-import { required, url, numeric, minValue } from '@vuelidate/validators';
+import { required, url } from '@vuelidate/validators';
 import { useAlert } from 'dashboard/composables';
 
 import NextButton from 'dashboard/components-next/button/Button.vue';
@@ -34,11 +34,12 @@ export default {
         webhook_url: '',
         description: '',
         position: 0,
-        icon: 'i-lucide-bot',
+        icon: 'i-lucide-app-window',
         enabled: true,
         allowed_roles: [],
       },
       availableIcons: [
+        { key: 'i-lucide-app-window', label: 'App Window', category: 'Apps' },
         { key: 'i-lucide-bot', label: 'Bot', category: 'AI' },
         { key: 'i-lucide-sparkles', label: 'Sparkles', category: 'AI' },
         { key: 'i-lucide-brain', label: 'Brain', category: 'AI' },
@@ -58,10 +59,10 @@ export default {
   },
   computed: {
     header() {
-      return this.$t(`CHAT_AGENTS.${this.mode}.HEADER`);
+      return this.$t(`CHAT_AGENTS.${this.mode.toUpperCase()}.HEADER`);
     },
     submitButtonLabel() {
-      return this.$t(`CHAT_AGENTS.${this.mode}.FORM_SUBMIT`);
+      return this.$t(`CHAT_AGENTS.${this.mode.toUpperCase()}.FORM_SUBMIT`);
     },
   },
   mounted() {
@@ -71,7 +72,7 @@ export default {
         webhook_url: this.selectedAgent.webhook_url,
         description: this.selectedAgent.description || '',
         position: this.selectedAgent.position,
-        icon: this.selectedAgent.icon || 'i-lucide-bot',
+        icon: this.selectedAgent.icon || 'i-lucide-app-window',
         enabled: this.selectedAgent.enabled,
         allowed_roles: this.selectedAgent.allowed_roles || [],
       };
@@ -84,7 +85,7 @@ export default {
         webhook_url: '',
         description: '',
         position: 0,
-        icon: 'i-lucide-bot',
+        icon: 'i-lucide-app-window',
         enabled: true,
         allowed_roles: [],
       };
@@ -103,7 +104,10 @@ export default {
     },
     async submitForm() {
       this.v$.$touch();
-      if (this.v$.$invalid) return;
+      if (this.v$.$invalid) {
+        useAlert('Please fill all required fields correctly');
+        return;
+      }
 
       try {
         if (this.mode === 'create') {
@@ -124,7 +128,6 @@ export default {
       agent: {
         title: { required },
         webhook_url: { required, url },
-        position: { required, numeric, minValue: minValue(0) },
       },
     };
   },
@@ -134,7 +137,7 @@ export default {
 <template>
   <div
     v-if="show"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
     @click.self="closeModal"
   >
     <div class="bg-n-background rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -241,7 +244,7 @@ export default {
         </div>
 
         <!-- Enabled Toggle -->
-        <div class="w-full flex items-center justify-between p-4 border rounded-md border-n-border">
+        <div class="w-full flex items-center justify-between">
           <div>
             <label class="text-sm font-medium text-n-slate-12">
               {{ $t('CHAT_AGENTS.FORM.ENABLED_LABEL') }}
@@ -262,24 +265,6 @@ export default {
           </label>
         </div>
 
-        <!-- Position -->
-        <div class="w-full">
-          <label class="block mb-2 text-sm font-medium text-n-slate-12">
-            {{ $t('CHAT_AGENTS.FORM.POSITION_LABEL') }}
-          </label>
-          <input
-            v-model.number="agent.position"
-            type="number"
-            min="0"
-            class="w-full px-3 py-2 border rounded-md bg-n-background border-n-border text-n-slate-12 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            @input="v$.agent.position.$touch"
-            @blur="v$.agent.position.$touch"
-          />
-          <p class="mt-1 text-xs text-n-slate-11">
-            {{ $t('CHAT_AGENTS.FORM.POSITION_HELP') }}
-          </p>
-        </div>
-
         <!-- Roles -->
         <div class="w-full">
           <label class="block mb-2 text-sm font-medium text-n-slate-12">
@@ -289,12 +274,7 @@ export default {
             <label
               v-for="role in availableRoles"
               :key="role.key"
-              class="flex items-center p-3 border rounded-md cursor-pointer transition-colors"
-              :class="
-                isRoleSelected(role.key)
-                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/10'
-                  : 'border-n-border hover:bg-n-alpha-2'
-              "
+              class="flex items-center cursor-pointer"
             >
               <input
                 type="checkbox"

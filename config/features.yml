@@ -223,3 +223,7 @@
 - name: quoted_email_reply
   display_name: Quoted Email Reply
   enabled: false
+- name: chat_agents
+  display_name: Chat Agents
+  enabled: true
+  help_url: https://chwt.app/hc/chat-agents

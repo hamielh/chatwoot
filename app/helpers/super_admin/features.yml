@@ -138,3 +138,9 @@ quepasa:
   enabled: true
   icon: 'icon-whatsapp-line'
   config_key: 'quepasa'
+conversation_sidebar:
+  name: 'Conversation Sidebar'
+  description: 'Manage which sections are visible in the conversation sidebar'
+  enabled: true
+  icon: 'icon-layout-right-line'
+  config_key: 'conversation_sidebar'

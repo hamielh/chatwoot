@@ -495,3 +495,60 @@
   locked: false
   description: 'The default user for Quepasa API authentication'
 ## ------ End of Quepasa ------ ##
+
+## ------ Conversation Sidebar Settings ------ ##
+- name: SIDEBAR_CONVERSATION_ACTIONS
+  display_title: 'Show Conversation Actions'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Conversation Actions section in the sidebar'
+- name: SIDEBAR_CONVERSATION_PARTICIPANTS
+  display_title: 'Show Conversation Participants'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Conversation Participants section'
+- name: SIDEBAR_CONVERSATION_INFO
+  display_title: 'Show Conversation Info'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Conversation Info section'
+- name: SIDEBAR_CONTACT_ATTRIBUTES
+  display_title: 'Show Contact Attributes'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Contact Attributes section'
+- name: SIDEBAR_PREVIOUS_CONVERSATION
+  display_title: 'Show Previous Conversations'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Previous Conversations section'
+- name: SIDEBAR_MACROS
+  display_title: 'Show Macros'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Macros section'
+- name: SIDEBAR_LINEAR_ISSUES
+  display_title: 'Show Linear Issues'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Linear Issues section'
+- name: SIDEBAR_SHOPIFY_ORDERS
+  display_title: 'Show Shopify Orders'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Shopify Orders section'
+- name: SIDEBAR_CONTACT_NOTES
+  display_title: 'Show Contact Notes'
+  value: true
+  type: 'boolean'
+  locked: false
+  description: 'Show/hide the Contact Notes section'
+## ------ End of Conversation Sidebar Settings ------ ##

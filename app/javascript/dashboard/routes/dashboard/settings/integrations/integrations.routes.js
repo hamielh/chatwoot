@@ -51,6 +51,7 @@ export default {
           component: ChatAgents,
           name: 'settings_chat_agents',
           meta: {
+            featureFlag: FEATURE_FLAGS.CHAT_AGENTS,
             permissions: ['administrator'],
           },
         },

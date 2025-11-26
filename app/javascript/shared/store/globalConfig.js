@@ -22,6 +22,15 @@ const {
   WIDGET_BRAND_URL: widgetBrandURL,
   DISABLE_USER_PROFILE_UPDATE: disableUserProfileUpdate,
   DEPLOYMENT_ENV: deploymentEnv,
+  SIDEBAR_CONVERSATION_ACTIONS: sidebarConversationActions,
+  SIDEBAR_CONVERSATION_PARTICIPANTS: sidebarConversationParticipants,
+  SIDEBAR_CONVERSATION_INFO: sidebarConversationInfo,
+  SIDEBAR_CONTACT_ATTRIBUTES: sidebarContactAttributes,
+  SIDEBAR_PREVIOUS_CONVERSATION: sidebarPreviousConversation,
+  SIDEBAR_MACROS: sidebarMacros,
+  SIDEBAR_LINEAR_ISSUES: sidebarLinearIssues,
+  SIDEBAR_SHOPIFY_ORDERS: sidebarShopifyOrders,
+  SIDEBAR_CONTACT_NOTES: sidebarContactNotes,
 } = window.globalConfig || {};
 
 const state = {
@@ -46,6 +55,15 @@ const state = {
   termsURL,
   widgetBrandURL,
   isEnterprise: parseBoolean(isEnterprise),
+  SIDEBAR_CONVERSATION_ACTIONS: parseBoolean(sidebarConversationActions),
+  SIDEBAR_CONVERSATION_PARTICIPANTS: parseBoolean(sidebarConversationParticipants),
+  SIDEBAR_CONVERSATION_INFO: parseBoolean(sidebarConversationInfo),
+  SIDEBAR_CONTACT_ATTRIBUTES: parseBoolean(sidebarContactAttributes),
+  SIDEBAR_PREVIOUS_CONVERSATION: parseBoolean(sidebarPreviousConversation),
+  SIDEBAR_MACROS: parseBoolean(sidebarMacros),
+  SIDEBAR_LINEAR_ISSUES: parseBoolean(sidebarLinearIssues),
+  SIDEBAR_SHOPIFY_ORDERS: parseBoolean(sidebarShopifyOrders),
+  SIDEBAR_CONTACT_NOTES: parseBoolean(sidebarContactNotes),
 };
 
 export const getters = {

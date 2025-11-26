@@ -51,8 +51,6 @@ export const actions = {
       const response = await ChatAgentsAPI.create(agentObj);
       commit(types.ADD_CHAT_AGENT, response.data);
       return response.data;
-    } catch (error) {
-      throw error;
     } finally {
       commit(types.SET_CHAT_AGENTS_UI_FLAG, { isCreating: false });
     }
@@ -64,8 +62,6 @@ export const actions = {
       const response = await ChatAgentsAPI.update(id, agentObj);
       commit(types.EDIT_CHAT_AGENT, response.data);
       return response.data;
-    } catch (error) {
-      throw error;
     } finally {
       commit(types.SET_CHAT_AGENTS_UI_FLAG, { isUpdating: false });
     }
@@ -76,8 +72,6 @@ export const actions = {
     try {
       await ChatAgentsAPI.delete(id);
       commit(types.DELETE_CHAT_AGENT, id);
-    } catch (error) {
-      throw error;
     } finally {
       commit(types.SET_CHAT_AGENTS_UI_FLAG, { isDeleting: false });
     }
@@ -88,8 +82,6 @@ export const actions = {
     try {
       const response = await ChatAgentsAPI.getMessages(agentId);
       commit(types.SET_CHAT_AGENT_MESSAGES, { agentId, messages: response.data });
-    } catch (error) {
-      throw error;
     } finally {
       commit(types.SET_CHAT_AGENTS_UI_FLAG, { isFetchingMessages: false });
     }
@@ -101,8 +93,6 @@ export const actions = {
       const response = await ChatAgentsAPI.sendMessage(agentId, message);
       commit(types.ADD_CHAT_AGENT_MESSAGES, { agentId, messages: response.data });
       return response.data;
-    } catch (error) {
-      throw error;
     } finally {
       commit(types.SET_CHAT_AGENTS_UI_FLAG, { isSendingMessage: false });
     }
@@ -113,8 +103,6 @@ export const actions = {
     try {
       await ChatAgentsAPI.clearMessages(agentId);
       commit(types.CLEAR_CHAT_AGENT_MESSAGES, agentId);
-    } catch (error) {
-      throw error;
     } finally {
       commit(types.SET_CHAT_AGENTS_UI_FLAG, { isClearingMessages: false });
     }
@@ -136,19 +124,41 @@ export const mutations = {
   [types.SET_CHAT_AGENTS]: MutationHelpers.set,
   [types.ADD_CHAT_AGENT]: MutationHelpers.create,
   [types.EDIT_CHAT_AGENT]: MutationHelpers.update,
-  [types.DELETE_CHAT_AGENT]: MutationHelpers.destroy,
+
+  [types.DELETE_CHAT_AGENT](_state, id) {
+    // Remove agent from records
+    MutationHelpers.destroy(_state, id);
+
+    // Remove agent's messages
+    const { [id]: removed, ...remainingMessages } = _state.messages;
+    _state.messages = remainingMessages;
+
+    // Clear selected agent if it was the deleted one
+    if (_state.selectedAgentId === id) {
+      _state.selectedAgentId = null;
+    }
+  },
 
   [types.SET_CHAT_AGENT_MESSAGES](_state, { agentId, messages }) {
-    _state.messages[agentId] = messages;
+    _state.messages = {
+      ..._state.messages,
+      [agentId]: messages,
+    };
   },
 
   [types.ADD_CHAT_AGENT_MESSAGES](_state, { agentId, messages }) {
     const currentMessages = _state.messages[agentId] || [];
-    _state.messages[agentId] = [...currentMessages, ...messages];
+    _state.messages = {
+      ..._state.messages,
+      [agentId]: [...currentMessages, ...messages],
+    };
   },
 
   [types.CLEAR_CHAT_AGENT_MESSAGES](_state, agentId) {
-    _state.messages[agentId] = [];
+    _state.messages = {
+      ..._state.messages,
+      [agentId]: [],
+    };
   },
 
   [types.SET_SELECTED_CHAT_AGENT](_state, agentId) {

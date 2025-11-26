@@ -42,7 +42,7 @@
 - Avoid writing specs unless explicitly asked
 - Remove dead/unreachable/unused code
 - Don’t write multiple versions or backups for the same logic — pick the best approach and implement it
-- Don't reference ChatGPT in commit messages
+- Don't reference Gemini in commit messages
 
 ## Project-Specific
 
