@@ -43,6 +43,28 @@ const {
 const dragging = ref(false);
 const conversationSidebarItems = ref([]);
 
+const globalConfig = useMapGetter('globalConfig/get');
+
+const isSectionVisible = sectionName => {
+  const configMap = {
+    conversation_actions: 'SIDEBAR_CONVERSATION_ACTIONS',
+    conversation_participants: 'SIDEBAR_CONVERSATION_PARTICIPANTS',
+    conversation_info: 'SIDEBAR_CONVERSATION_INFO',
+    contact_attributes: 'SIDEBAR_CONTACT_ATTRIBUTES',
+    previous_conversation: 'SIDEBAR_PREVIOUS_CONVERSATION',
+    macros: 'SIDEBAR_MACROS',
+    linear_issues: 'SIDEBAR_LINEAR_ISSUES',
+    shopify_orders: 'SIDEBAR_SHOPIFY_ORDERS',
+    contact_notes: 'SIDEBAR_CONTACT_NOTES',
+  };
+
+  const configKey = configMap[sectionName];
+  if (!configKey) return true;
+
+  const configValue = globalConfig.value[configKey];
+  return configValue === undefined || configValue === true || configValue === 'true';
+};
+
 const shopifyIntegration = useFunctionGetter(
   'integrations/getIntegration',
   'shopify'
@@ -138,7 +160,7 @@ onMounted(() => {
       >
         <template #item="{ element }">
           <div
-            v-if="element.name === 'conversation_actions'"
+            v-if="element.name === 'conversation_actions' && isSectionVisible('conversation_actions')"
             class="conversation--actions"
           >
             <AccordionItem
@@ -155,7 +177,7 @@ onMounted(() => {
             </AccordionItem>
           </div>
           <div
-            v-else-if="element.name === 'conversation_participants'"
+            v-else-if="element.name === 'conversation_participants' && isSectionVisible('conversation_participants')"
             class="conversation--actions"
           >
             <AccordionItem
@@ -172,7 +194,7 @@ onMounted(() => {
               />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'conversation_info'">
+          <div v-else-if="element.name === 'conversation_info' && isSectionVisible('conversation_info')">
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONVERSATION_INFO')"
               :is-open="isContactSidebarItemOpen('is_conv_details_open')"
@@ -187,7 +209,7 @@ onMounted(() => {
               />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'contact_attributes'">
+          <div v-else-if="element.name === 'contact_attributes' && isSectionVisible('contact_attributes')">
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONTACT_ATTRIBUTES')"
               :is-open="isContactSidebarItemOpen('is_contact_attributes_open')"
@@ -207,7 +229,7 @@ onMounted(() => {
               />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'previous_conversation'">
+          <div v-else-if="element.name === 'previous_conversation' && isSectionVisible('previous_conversation')">
             <AccordionItem
               v-if="contact.id"
               :title="
@@ -226,7 +248,7 @@ onMounted(() => {
             </AccordionItem>
           </div>
           <woot-feature-toggle
-            v-else-if="element.name === 'macros'"
+            v-else-if="element.name === 'macros' && isSectionVisible('macros')"
             feature-key="macros"
           >
             <AccordionItem
@@ -238,7 +260,7 @@ onMounted(() => {
               <MacrosList :conversation-id="conversationId" />
             </AccordionItem>
           </woot-feature-toggle>
-          <div v-else-if="element.name === 'linear_issues'">
+          <div v-else-if="element.name === 'linear_issues' && isSectionVisible('linear_issues')">
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.LINEAR_ISSUES')"
               :is-open="isContactSidebarItemOpen('is_linear_issues_open')"
@@ -253,7 +275,7 @@ onMounted(() => {
           </div>
           <div
             v-else-if="
-              element.name === 'shopify_orders' && isShopifyFeatureEnabled
+              element.name === 'shopify_orders' && isShopifyFeatureEnabled && isSectionVisible('shopify_orders')
             "
           >
             <AccordionItem
@@ -267,7 +289,7 @@ onMounted(() => {
               <ShopifyOrdersList :contact-id="contactId" />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'contact_notes'">
+          <div v-else-if="element.name === 'contact_notes' && isSectionVisible('contact_notes')">
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONTACT_NOTES')"
               :is-open="isContactSidebarItemOpen('is_contact_notes_open')"

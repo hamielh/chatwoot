@@ -7,6 +7,7 @@ import automation from './automation.json';
 import bulkActions from './bulkActions.json';
 import campaign from './campaign.json';
 import cannedMgmt from './cannedMgmt.json';
+import chatAgents from './chatAgents.json';
 import chatlist from './chatlist.json';
 import components from './components.json';
 import contact from './contact.json';
@@ -31,6 +32,7 @@ import resetPassword from './resetPassword.json';
 import search from './search.json';
 import setNewPassword from './setNewPassword.json';
 import settings from './settings.json';
+import sidebarApps from './sidebarApps.json';
 import signup from './signup.json';
 import sla from './sla.json';
 import teamsSettings from './teamsSettings.json';
@@ -48,6 +50,7 @@ export default {
   ...bulkActions,
   ...campaign,
   ...cannedMgmt,
+  ...chatAgents,
   ...chatlist,
   ...components,
   ...contact,
@@ -72,6 +75,7 @@ export default {
   ...search,
   ...setNewPassword,
   ...settings,
+  ...sidebarApps,
   ...signup,
   ...sla,
   ...teamsSettings,

@@ -1,0 +1,106 @@
+{
+  "CHAT_AGENTS": {
+    "TITLE": "Chat Agents",
+    "LEARN_MORE": "Learn more",
+    "LOADING": "Loading chat agents...",
+    "CLOSE": "Close",
+    "CLEAR_HISTORY": "Clear history",
+    "SELECT_AGENT": "Select an agent",
+    "EMPTY_STATE": "Start a conversation by sending a message",
+    "INPUT_PLACEHOLDER": "Type your message...",
+    "TYPING": "Agent is typing...",
+    "HEADER": {
+      "TITLE": "Chat Agents",
+      "DESCRIPTION": "Create and manage AI-powered chat agents that connect to external APIs via webhooks.",
+      "ADD_BUTTON": "Add Agent"
+    },
+    "TABLE": {
+      "NAME": "Name",
+      "WEBHOOK_URL": "Webhook URL",
+      "STATUS": "Status",
+      "ACTIONS": "Actions"
+    },
+    "STATUS": {
+      "ENABLED": "Enabled",
+      "DISABLED": "Disabled"
+    },
+    "LIST_EMPTY_STATE": {
+      "TITLE": "No chat agents yet",
+      "DESCRIPTION": "Create your first chat agent to start having automated conversations powered by external APIs and AI services.",
+      "ADD_BUTTON": "Create Your First Agent"
+    },
+    "CREATE": {
+      "HEADER": "Create Chat Agent",
+      "FORM_SUBMIT": "Create Agent",
+      "API_SUCCESS": "Chat agent created successfully",
+      "API_ERROR": "Failed to create chat agent"
+    },
+    "UPDATE": {
+      "HEADER": "Edit Chat Agent",
+      "FORM_SUBMIT": "Update Agent",
+      "API_SUCCESS": "Chat agent updated successfully",
+      "API_ERROR": "Failed to update chat agent"
+    },
+    "create": {
+      "TITLE": "Create Chat Agent",
+      "API_SUCCESS": "Chat agent created successfully",
+      "API_ERROR": "Failed to create chat agent"
+    },
+    "update": {
+      "TITLE": "Update Chat Agent",
+      "API_SUCCESS": "Chat agent updated successfully",
+      "API_ERROR": "Failed to update chat agent"
+    },
+    "DELETE": {
+      "BUTTON_TEXT": "Delete",
+      "TITLE": "Delete Chat Agent",
+      "CONFIRM": "Are you sure you want to delete {name}?",
+      "CONFIRM_YES": "Yes, Delete",
+      "CONFIRM_NO": "Cancel",
+      "SUCCESS": "Chat agent deleted successfully",
+      "ERROR": "Failed to delete chat agent"
+    },
+    "EDIT": {
+      "BUTTON_TEXT": "Edit"
+    },
+    "FORM": {
+      "TITLE_LABEL": "Agent Name",
+      "TITLE_PLACEHOLDER": "e.g., Support Assistant",
+      "TITLE_ERROR": "Agent name is required",
+      "WEBHOOK_URL_LABEL": "Webhook URL",
+      "WEBHOOK_URL_PLACEHOLDER": "https://your-api.com/webhook",
+      "WEBHOOK_URL_ERROR": "Valid webhook URL is required",
+      "WEBHOOK_URL_HELP": "The endpoint that will receive user messages and return responses",
+      "DESCRIPTION_LABEL": "Description",
+      "DESCRIPTION_PLACEHOLDER": "Describe what this agent does...",
+      "ICON_LABEL": "Icon",
+      "ENABLED_LABEL": "Enable Agent",
+      "ENABLED_HELP": "When disabled, this agent won't appear in the chat launcher",
+      "POSITION_LABEL": "Display Order",
+      "POSITION_HELP": "Lower numbers appear first in the agent selector",
+      "ROLES_LABEL": "Allowed Roles",
+      "ROLES_HELP": "Leave empty to allow all roles, or select specific roles that can use this agent",
+      "CALLBACK_URL_LABEL": "Callback URL",
+      "WEBHOOK_TOKEN_LABEL": "Authorization Token",
+      "WEBHOOK_TOKEN_HELP": "Use this token in the Authorization header when calling back: Bearer {token}",
+      "COPY": "Copy to clipboard",
+      "COPIED": "Copied to clipboard!",
+      "COPY_ERROR": "Failed to copy to clipboard",
+      "WEBHOOK_PARAMS_LABEL": "Custom Parameters",
+      "WEBHOOK_PARAMS_HELP": "Add custom key-value pairs that will be sent to your webhook in the payload",
+      "ADD_PARAM": "Add Parameter",
+      "NO_PARAMS": "No custom parameters added yet",
+      "PARAM_KEY_PLACEHOLDER": "Key (e.g., api_key)",
+      "PARAM_VALUE_PLACEHOLDER": "Value (e.g., abc123)",
+      "CANCEL": "Cancel"
+    },
+    "SUCCESS": {
+      "CLEAR_MESSAGES": "Chat history cleared"
+    },
+    "ERROR": {
+      "FETCH_MESSAGES": "Failed to load messages",
+      "SEND_MESSAGE": "Failed to send message",
+      "CLEAR_MESSAGES": "Failed to clear history"
+    }
+  }
+}

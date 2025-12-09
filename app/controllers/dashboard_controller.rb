@@ -71,7 +71,16 @@ class DashboardController < ActionController::Base
       WHATSAPP_CONFIGURATION_ID: GlobalConfigService.load('WHATSAPP_CONFIGURATION_ID', ''),
       IS_ENTERPRISE: ChatwootApp.enterprise?,
       AZURE_APP_ID: GlobalConfigService.load('AZURE_APP_ID', ''),
-      GIT_SHA: GIT_HASH
+      GIT_SHA: GIT_HASH,
+      SIDEBAR_CONVERSATION_ACTIONS: GlobalConfigService.load('SIDEBAR_CONVERSATION_ACTIONS', 'true'),
+      SIDEBAR_CONVERSATION_PARTICIPANTS: GlobalConfigService.load('SIDEBAR_CONVERSATION_PARTICIPANTS', 'true'),
+      SIDEBAR_CONVERSATION_INFO: GlobalConfigService.load('SIDEBAR_CONVERSATION_INFO', 'true'),
+      SIDEBAR_CONTACT_ATTRIBUTES: GlobalConfigService.load('SIDEBAR_CONTACT_ATTRIBUTES', 'true'),
+      SIDEBAR_PREVIOUS_CONVERSATION: GlobalConfigService.load('SIDEBAR_PREVIOUS_CONVERSATION', 'true'),
+      SIDEBAR_MACROS: GlobalConfigService.load('SIDEBAR_MACROS', 'true'),
+      SIDEBAR_LINEAR_ISSUES: GlobalConfigService.load('SIDEBAR_LINEAR_ISSUES', 'true'),
+      SIDEBAR_SHOPIFY_ORDERS: GlobalConfigService.load('SIDEBAR_SHOPIFY_ORDERS', 'true'),
+      SIDEBAR_CONTACT_NOTES: GlobalConfigService.load('SIDEBAR_CONTACT_NOTES', 'true')
     }
   end
 

@@ -30,6 +30,9 @@ import csat from './modules/csat';
 import customRole from './modules/customRole';
 import customViews from './modules/customViews';
 import dashboardApps from './modules/dashboardApps';
+import sidebarApps from './modules/sidebarApps';
+import chatAgents from './modules/chatAgents';
+import chatAgentUI from './modules/chatAgentUI';
 import draftMessages from './modules/draftMessages';
 import globalConfig from 'shared/store/globalConfig';
 import inboxAssignableAgents from './modules/inboxAssignableAgents';
@@ -93,6 +96,9 @@ export default createStore({
     customRole,
     customViews,
     dashboardApps,
+    sidebarApps,
+    chatAgents,
+    chatAgentUI,
     draftMessages,
     globalConfig,
     inboxAssignableAgents,

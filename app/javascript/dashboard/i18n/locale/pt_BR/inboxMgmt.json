@@ -229,7 +229,9 @@
           "WHATSAPP_CLOUD": "Cloud do WhatsApp",
           "WHATSAPP_CLOUD_DESC": "Configuração rápida via Meta",
           "TWILIO_DESC": "Conectar através de credenciais Twilio",
-          "360_DIALOG": "360Dialog"
+          "360_DIALOG": "360Dialog",
+          "WHATSAPP_API": "WhatsApp",
+          "WHATSAPP_API_DESC": "Conecte ao WhatsApp via QR Code"
         },
         "SELECT_PROVIDER": {
           "TITLE": "Selecione seu provedor de API",
@@ -504,6 +506,40 @@
         "SIGN_IN": "Entrar com o Google",
         "EMAIL_PLACEHOLDER": "Digite o endereço de e-mail",
         "ERROR_MESSAGE": "Houve um erro ao conectar com o Google, por favor, tente novamente"
+      },
+      "WHATSAPP_API": {
+        "TITLE": "WhatsApp API",
+        "DESC": "Conecte seu WhatsApp Business via API",
+        "CHANNEL_NAME": {
+          "LABEL": "Nome da Caixa",
+          "PLACEHOLDER": "Suporte WhatsApp",
+          "ERROR": "Por favor, forneça um nome válido para a caixa"
+        },
+        "SUBMIT_BUTTON": "Criar Caixa WhatsApp",
+        "QR_CODE": {
+          "TITLE": "Conectar WhatsApp",
+          "DESCRIPTION": "Escaneie este código QR com seu WhatsApp para conectar sua conta",
+          "WAITING": "Aguardando conexão..."
+        },
+        "CONNECTION_SUCCESS": "WhatsApp conectado com sucesso!",
+        "CONNECTION_ERROR": "Falha ao salvar informações de conexão. Tente novamente.",
+        "API": {
+          "ERROR_MESSAGE": "Não foi possível criar a caixa WhatsApp. Tente novamente."
+        }
+      },
+      "WHATSAPP_API_CONNECTION": {
+        "TITLE": "Conexão WhatsApp",
+        "DESCRIPTION": "Gerencie sua conexão WhatsApp via código QR",
+        "CONNECTED": "Conectado",
+        "NOT_CONNECTED": "Não Conectado",
+        "PHONE_NUMBER": "Número de Telefone",
+        "TOKEN_LABEL": "Token",
+        "WID_LABEL": "WID",
+        "CONNECT_BUTTON": "Conectar WhatsApp",
+        "CONNECT_DESCRIPTION": "Escaneie um código QR com seu WhatsApp para conectar esta caixa",
+        "DISCONNECT_BUTTON": "Desconectar WhatsApp",
+        "DISCONNECT_SUCCESS": "WhatsApp desconectado com sucesso!",
+        "DISCONNECT_ERROR": "Falha ao desconectar WhatsApp. Tente novamente."
       }
     },
     "DETAILS": {
@@ -608,7 +644,8 @@
       "WIDGET_BUILDER": "Construtor de Widget",
       "BOT_CONFIGURATION": "Configuração do Bot",
       "ACCOUNT_HEALTH": "Saúde da conta",
-      "CSAT": "CSAT"
+      "CSAT": "CSAT",
+      "WHATSAPP": "WhatsApp"
     },
     "ACCOUNT_HEALTH": {
       "TITLE": "Gerencie sua conta do WhatsApp",

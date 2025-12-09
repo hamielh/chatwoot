@@ -95,7 +95,8 @@ class Attachment < ApplicationRecord
     audio_file_data = base_data.merge(file_metadata)
     audio_file_data.merge(
       {
-        transcribed_text: meta&.[]('transcribed_text') || ''
+        transcribed_text: meta&.[]('transcribed_text') || '',
+        duration: file.metadata[:duration]
       }
     )
   end

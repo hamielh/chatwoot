@@ -29,6 +29,9 @@
       }
     },
     "ADD": {
+      "GENERAL": {
+        "COLON": ":"
+      },
       "CHANNEL_NAME": {
         "LABEL": "Inbox Name",
         "PLACEHOLDER": "Enter your inbox name (eg: Acme Inc)",
@@ -229,6 +232,8 @@
           "WHATSAPP_CLOUD": "WhatsApp Cloud",
           "WHATSAPP_CLOUD_DESC": "Quick setup through Meta",
           "TWILIO_DESC": "Connect via Twilio credentials",
+          "WHATSAPP_API": "WhatsApp",
+          "WHATSAPP_API_DESC": "Connect to WhatsApp via QR Code",
           "360_DIALOG": "360Dialog"
         },
         "SELECT_PROVIDER": {
@@ -363,6 +368,55 @@
         "API": {
           "ERROR_MESSAGE": "We were not able to save the api channel"
         }
+      },
+      "WHATSAPP_API": {
+        "TITLE": "WhatsApp API",
+        "DESC": "Connect your WhatsApp Business via API",
+        "CHANNEL_NAME": {
+          "LABEL": "Inbox Name",
+          "PLACEHOLDER": "WhatsApp Support",
+          "ERROR": "Please provide a valid inbox name"
+        },
+        "PHONE_NUMBER": {
+          "LABEL": "Phone Number",
+          "PLACEHOLDER": "+5511999999999",
+          "ERROR": "Please provide a valid phone number",
+          "SUBTITLE": "Phone number with country code (eg: +5511999999999)"
+        },
+        "SUBMIT_BUTTON": "Create WhatsApp Inbox",
+        "QR_CODE": {
+          "TITLE": "Connect WhatsApp",
+          "DESCRIPTION": "Scan this QR code with your WhatsApp to connect your account",
+          "WAITING": "Waiting for connection...",
+          "LOADING": "Loading QR Code..."
+        },
+        "CONNECTION_SUCCESS": "WhatsApp connected successfully!",
+        "CONNECTION_ERROR": "Failed to save connection info. Please try again.",
+        "API": {
+          "ERROR_MESSAGE": "Could not create WhatsApp inbox. Please try again."
+        }
+      },
+      "WHATSAPP_API_CONNECTION": {
+        "TITLE": "WhatsApp Connection",
+        "DESCRIPTION": "Manage your WhatsApp connection via QR code",
+        "CONNECTED": "Connected",
+        "NOT_CONNECTED": "Not Connected",
+        "PHONE_NUMBER": "Phone Number",
+        "TOKEN_LABEL": "Token",
+        "WID_LABEL": "WID",
+        "CONNECT_BUTTON": "Connect WhatsApp",
+        "CONNECT_DESCRIPTION": "Scan a QR code with your WhatsApp to connect this inbox",
+        "DISCONNECT_BUTTON": "Disconnect WhatsApp",
+        "DISCONNECT_SUCCESS": "WhatsApp disconnected successfully!",
+        "DISCONNECT_ERROR": "Failed to disconnect WhatsApp. Please try again.",
+        "SETTINGS_TITLE": "Message Settings",
+        "SETTINGS_DESCRIPTION": "Configure which types of messages to receive",
+        "IGNORE_GROUPS_LABEL": "Group Messages",
+        "IGNORE_GROUPS_ENABLED": "Ignore group messages",
+        "IGNORE_GROUPS_DISABLED": "Receive group messages",
+        "IGNORE_GROUPS_HELP_TEXT": "Choose whether to ignore or receive messages from WhatsApp groups",
+        "SETTINGS_SAVED": "Settings saved successfully!",
+        "SETTINGS_ERROR": "Failed to save settings. Please try again."
       },
       "EMAIL_CHANNEL": {
         "TITLE": "Email Channel",
@@ -608,6 +662,7 @@
       "WIDGET_BUILDER": "Widget Builder",
       "BOT_CONFIGURATION": "Bot Configuration",
       "ACCOUNT_HEALTH": "Account Health",
+      "WHATSAPP": "WhatsApp",
       "CSAT": "CSAT"
     },
     "ACCOUNT_HEALTH": {

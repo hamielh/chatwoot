@@ -34,6 +34,7 @@ class ActionCableConnector extends BaseActionCableConnector {
       'conversation.updated': this.onConversationUpdated,
       'account.cache_invalidated': this.onCacheInvalidate,
       'copilot.message.created': this.onCopilotMessageCreated,
+      'chat_agent.message_received': this.onChatAgentMessage,
     };
   }
 
@@ -199,6 +200,39 @@ class ActionCableConnector extends BaseActionCableConnector {
     this.app.$store.dispatch('labels/revalidate', { newKey: keys.label });
     this.app.$store.dispatch('inboxes/revalidate', { newKey: keys.inbox });
     this.app.$store.dispatch('teams/revalidate', { newKey: keys.team });
+  };
+
+  onChatAgentMessage = data => {
+    const {
+      chat_agent_id: chatAgentId,
+      id,
+      content,
+      role,
+      status,
+      created_at,
+    } = data;
+
+    // Check if message already exists in store
+    const existingMessages =
+      this.app.$store.getters['chatAgents/getMessages'](chatAgentId);
+    const messageExists = existingMessages.some(msg => msg.id === id);
+
+    // Only add if message doesn't exist yet
+    if (!messageExists) {
+      this.app.$store.commit('chatAgents/ADD_CHAT_AGENT_MESSAGES', {
+        agentId: chatAgentId,
+        messages: [
+          {
+            id,
+            chat_agent_id: chatAgentId,
+            content,
+            role,
+            status,
+            created_at,
+          },
+        ],
+      });
+    }
   };
 }
 

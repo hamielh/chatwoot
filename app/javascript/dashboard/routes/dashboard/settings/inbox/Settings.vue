@@ -23,6 +23,7 @@ import CollaboratorsPage from './settingsPage/CollaboratorsPage.vue';
 import WidgetBuilder from './WidgetBuilder.vue';
 import BotConfiguration from './components/BotConfiguration.vue';
 import AccountHealth from './components/AccountHealth.vue';
+import WhatsAppApiConnection from './components/WhatsAppApiConnection.vue';
 import { FEATURE_FLAGS } from '../../../../featureFlags';
 import SenderNameExamplePreview from './components/SenderNameExamplePreview.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
@@ -54,6 +55,7 @@ export default {
     Editor,
     Avatar,
     AccountHealth,
+    WhatsAppApiConnection,
   },
   mixins: [inboxMixin],
   setup() {
@@ -187,6 +189,16 @@ export default {
           {
             key: 'whatsapp-health',
             name: this.$t('INBOX_MGMT.TABS.ACCOUNT_HEALTH'),
+          },
+        ];
+      }
+
+      if (this.isAWhatsAppApiChannel) {
+        visibleToAllChannelTabs = [
+          ...visibleToAllChannelTabs,
+          {
+            key: 'whatsapp-api-connection',
+            name: this.$t('INBOX_MGMT.TABS.WHATSAPP'),
           },
         ];
       }
@@ -942,6 +954,9 @@ export default {
       </div>
       <div v-if="selectedTabKey === 'whatsapp-health'">
         <AccountHealth :health-data="healthData" />
+      </div>
+      <div v-if="selectedTabKey === 'whatsapp-api-connection'">
+        <WhatsAppApiConnection :inbox="inbox" />
       </div>
     </section>
   </div>

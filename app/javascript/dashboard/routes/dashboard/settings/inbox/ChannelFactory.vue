@@ -11,6 +11,7 @@ import Line from './channels/Line.vue';
 import Telegram from './channels/Telegram.vue';
 import Instagram from './channels/Instagram.vue';
 import Voice from './channels/Voice.vue';
+import WhatsappApi from './channels/WhatsappApi.vue';
 
 const channelViewList = {
   facebook: Facebook,
@@ -20,6 +21,7 @@ const channelViewList = {
   email: Email,
   sms: Sms,
   whatsapp: Whatsapp,
+  whatsapp_api: WhatsappApi,
   line: Line,
   telegram: Telegram,
   instagram: Instagram,

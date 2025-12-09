@@ -132,3 +132,15 @@ shopify:
   enabled: true
   icon: 'icon-shopify'
   config_key: 'shopify'
+quepasa:
+  name: 'Quepasa'
+  description: 'Configuration for WhatsApp API via Quepasa'
+  enabled: true
+  icon: 'icon-whatsapp-line'
+  config_key: 'quepasa'
+conversation_sidebar:
+  name: 'Conversation Sidebar'
+  description: 'Manage which sections are visible in the conversation sidebar'
+  enabled: true
+  icon: 'icon-layout-right-line'
+  config_key: 'conversation_sidebar'

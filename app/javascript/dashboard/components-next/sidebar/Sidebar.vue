@@ -76,6 +76,8 @@ const contactCustomViews = useMapGetter('customViews/getContactCustomViews');
 const conversationCustomViews = useMapGetter(
   'customViews/getConversationCustomViews'
 );
+const sidebarApps = useMapGetter('sidebarApps/getRecords');
+const currentRole = useMapGetter('getCurrentRole');
 
 onMounted(() => {
   store.dispatch('labels/get');
@@ -85,11 +87,36 @@ onMounted(() => {
   store.dispatch('attributes/get');
   store.dispatch('customViews/get', 'conversation');
   store.dispatch('customViews/get', 'contact');
+  store.dispatch('sidebarApps/get');
 });
 
 const sortedInboxes = computed(() =>
   inboxes.value.slice().sort((a, b) => a.name.localeCompare(b.name))
 );
+
+const filteredSidebarApps = computed(() => {
+  return sidebarApps.value
+    .filter(app => {
+      if (!app.allowed_roles || app.allowed_roles.length === 0) {
+        return true;
+      }
+      return app.allowed_roles.includes(currentRole.value);
+    })
+    .slice()
+    .sort((a, b) => a.position - b.position);
+});
+
+const rootSidebarApps = computed(() => {
+  return filteredSidebarApps.value.filter(
+    app => app.display_location === 'root'
+  );
+});
+
+const appsMenuSidebarApps = computed(() => {
+  return filteredSidebarApps.value.filter(
+    app => app.display_location === 'apps_menu'
+  );
+});
 
 const closeMobileSidebar = () => {
   if (!props.isMobileSidebarOpen) return;
@@ -125,7 +152,7 @@ const newReportRoutes = () => [
 const reportRoutes = computed(() => newReportRoutes());
 
 const menuItems = computed(() => {
-  return [
+  const baseItems = [
     {
       name: 'Inbox',
       label: t('SIDEBAR.INBOX'),
@@ -563,6 +590,43 @@ const menuItems = computed(() => {
       ],
     },
   ];
+
+  // Add root sidebar apps directly to the menu
+  const rootApps = rootSidebarApps.value.map(app => ({
+    name: `CustomApp-${app.id}`,
+    label: app.title,
+    icon: app.icon || 'i-lucide-app-window',
+    to: accountScopedRoute('sidebar_app_view', { appId: app.id }),
+    activeOn: [`sidebar_app_view_${app.id}`],
+  }));
+
+  // Add apps menu group if there are apps to show
+  const appsMenuGroup =
+    appsMenuSidebarApps.value.length > 0
+      ? [
+          {
+            name: 'Apps',
+            label: t('SIDEBAR.APPS'),
+            icon: 'i-lucide-app-window',
+            children: appsMenuSidebarApps.value.map(app => ({
+              name: `CustomApp-${app.id}`,
+              label: app.title,
+              icon: app.icon || 'i-lucide-app-window',
+              to: accountScopedRoute('sidebar_app_view', { appId: app.id }),
+              activeOn: [`sidebar_app_view_${app.id}`],
+            })),
+          },
+        ]
+      : [];
+
+  // Insert root apps after Conversation and before Captain
+  const conversationIndex = baseItems.findIndex(
+    item => item.name === 'Conversation'
+  );
+  const result = [...baseItems];
+  result.splice(conversationIndex + 1, 0, ...rootApps, ...appsMenuGroup);
+
+  return result;
 });
 </script>
 
