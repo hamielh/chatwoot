@@ -5,7 +5,9 @@ import {
   useFunctionGetter,
   useStore,
 } from 'dashboard/composables/store';
+import { useAccount } from 'dashboard/composables/useAccount';
 import { useUISettings } from 'dashboard/composables/useUISettings';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 
 import AccordionItem from 'dashboard/components/Accordion/AccordionItem.vue';
 import ContactConversations from './ContactConversations.vue';
@@ -62,7 +64,9 @@ const isSectionVisible = sectionName => {
   if (!configKey) return true;
 
   const configValue = globalConfig.value[configKey];
-  return configValue === undefined || configValue === true || configValue === 'true';
+  return (
+    configValue === undefined || configValue === true || configValue === 'true'
+  );
 };
 
 const shopifyIntegration = useFunctionGetter(
@@ -74,12 +78,22 @@ const isShopifyFeatureEnabled = computed(
   () => shopifyIntegration.value.enabled
 );
 
+const { isCloudFeatureEnabled } = useAccount();
+
+const isLinearFeatureEnabled = computed(() =>
+  isCloudFeatureEnabled(FEATURE_FLAGS.LINEAR)
+);
+
 const linearIntegration = useFunctionGetter(
   'integrations/getIntegration',
   'linear'
 );
 
-const isLinearIntegrationEnabled = computed(
+const isLinearClientIdConfigured = computed(() => {
+  return !!linearIntegration.value?.id;
+});
+
+const isLinearConnected = computed(
   () => linearIntegration.value?.enabled || false
 );
 
@@ -160,7 +174,10 @@ onMounted(() => {
       >
         <template #item="{ element }">
           <div
-            v-if="element.name === 'conversation_actions' && isSectionVisible('conversation_actions')"
+            v-if="
+              element.name === 'conversation_actions' &&
+              isSectionVisible('conversation_actions')
+            "
             class="conversation--actions"
           >
             <AccordionItem
@@ -177,7 +194,10 @@ onMounted(() => {
             </AccordionItem>
           </div>
           <div
-            v-else-if="element.name === 'conversation_participants' && isSectionVisible('conversation_participants')"
+            v-else-if="
+              element.name === 'conversation_participants' &&
+              isSectionVisible('conversation_participants')
+            "
             class="conversation--actions"
           >
             <AccordionItem
@@ -194,7 +214,12 @@ onMounted(() => {
               />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'conversation_info' && isSectionVisible('conversation_info')">
+          <div
+            v-else-if="
+              element.name === 'conversation_info' &&
+              isSectionVisible('conversation_info')
+            "
+          >
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONVERSATION_INFO')"
               :is-open="isContactSidebarItemOpen('is_conv_details_open')"
@@ -209,7 +234,12 @@ onMounted(() => {
               />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'contact_attributes' && isSectionVisible('contact_attributes')">
+          <div
+            v-else-if="
+              element.name === 'contact_attributes' &&
+              isSectionVisible('contact_attributes')
+            "
+          >
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONTACT_ATTRIBUTES')"
               :is-open="isContactSidebarItemOpen('is_contact_attributes_open')"
@@ -229,7 +259,12 @@ onMounted(() => {
               />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'previous_conversation' && isSectionVisible('previous_conversation')">
+          <div
+            v-else-if="
+              element.name === 'previous_conversation' &&
+              isSectionVisible('previous_conversation')
+            "
+          >
             <AccordionItem
               v-if="contact.id"
               :title="
@@ -260,7 +295,14 @@ onMounted(() => {
               <MacrosList :conversation-id="conversationId" />
             </AccordionItem>
           </woot-feature-toggle>
-          <div v-else-if="element.name === 'linear_issues' && isSectionVisible('linear_issues')">
+          <div
+            v-else-if="
+              element.name === 'linear_issues' &&
+              isSectionVisible('linear_issues') &&
+              isLinearFeatureEnabled &&
+              isLinearClientIdConfigured
+            "
+          >
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.LINEAR_ISSUES')"
               :is-open="isContactSidebarItemOpen('is_linear_issues_open')"
@@ -269,13 +311,15 @@ onMounted(() => {
                 value => toggleSidebarUIState('is_linear_issues_open', value)
               "
             >
-              <LinearSetupCTA v-if="!isLinearIntegrationEnabled" />
+              <LinearSetupCTA v-if="!isLinearConnected" />
               <LinearIssuesList v-else :conversation-id="conversationId" />
             </AccordionItem>
           </div>
           <div
             v-else-if="
-              element.name === 'shopify_orders' && isShopifyFeatureEnabled && isSectionVisible('shopify_orders')
+              element.name === 'shopify_orders' &&
+              isShopifyFeatureEnabled &&
+              isSectionVisible('shopify_orders')
             "
           >
             <AccordionItem
@@ -289,7 +333,12 @@ onMounted(() => {
               <ShopifyOrdersList :contact-id="contactId" />
             </AccordionItem>
           </div>
-          <div v-else-if="element.name === 'contact_notes' && isSectionVisible('contact_notes')">
+          <div
+            v-else-if="
+              element.name === 'contact_notes' &&
+              isSectionVisible('contact_notes')
+            "
+          >
             <AccordionItem
               :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONTACT_NOTES')"
               :is-open="isContactSidebarItemOpen('is_contact_notes_open')"
