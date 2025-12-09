@@ -86,6 +86,12 @@
       "COPY": "Copy to clipboard",
       "COPIED": "Copied to clipboard!",
       "COPY_ERROR": "Failed to copy to clipboard",
+      "WEBHOOK_PARAMS_LABEL": "Custom Parameters",
+      "WEBHOOK_PARAMS_HELP": "Add custom key-value pairs that will be sent to your webhook in the payload",
+      "ADD_PARAM": "Add Parameter",
+      "NO_PARAMS": "No custom parameters added yet",
+      "PARAM_KEY_PLACEHOLDER": "Key (e.g., api_key)",
+      "PARAM_VALUE_PLACEHOLDER": "Value (e.g., abc123)",
       "CANCEL": "Cancel"
     },
     "SUCCESS": {

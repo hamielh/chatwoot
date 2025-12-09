@@ -13,6 +13,7 @@ export const INBOX_FEATURE_MAP = {
     INBOX_TYPES.WEB,
     INBOX_TYPES.TWITTER,
     INBOX_TYPES.WHATSAPP,
+    INBOX_TYPES.WHATSAPP_API,
     INBOX_TYPES.TELEGRAM,
     INBOX_TYPES.API,
   ],
@@ -20,6 +21,7 @@ export const INBOX_FEATURE_MAP = {
     INBOX_TYPES.WEB,
     INBOX_TYPES.TWITTER,
     INBOX_TYPES.WHATSAPP,
+    INBOX_TYPES.WHATSAPP_API,
     INBOX_TYPES.TELEGRAM,
     INBOX_TYPES.API,
   ],
@@ -124,6 +126,7 @@ export default {
     isAWhatsAppChannel() {
       return (
         this.channelType === INBOX_TYPES.WHATSAPP ||
+        this.channelType === INBOX_TYPES.WHATSAPP_API ||
         this.isATwilioWhatsAppChannel
       );
     },

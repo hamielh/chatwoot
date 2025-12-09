@@ -203,20 +203,36 @@ class ActionCableConnector extends BaseActionCableConnector {
   };
 
   onChatAgentMessage = data => {
-    const { chat_agent_id: chatAgentId, id, content, role, status, created_at } = data;
+    const {
+      chat_agent_id: chatAgentId,
+      id,
+      content,
+      role,
+      status,
+      created_at,
+    } = data;
 
-    // Add the message directly to the store for the specific agent
-    this.app.$store.commit('chatAgents/ADD_CHAT_AGENT_MESSAGES', {
-      agentId: chatAgentId,
-      messages: [{
-        id,
-        chat_agent_id: chatAgentId,
-        content,
-        role,
-        status,
-        created_at
-      }]
-    });
+    // Check if message already exists in store
+    const existingMessages =
+      this.app.$store.getters['chatAgents/getMessages'](chatAgentId);
+    const messageExists = existingMessages.some(msg => msg.id === id);
+
+    // Only add if message doesn't exist yet
+    if (!messageExists) {
+      this.app.$store.commit('chatAgents/ADD_CHAT_AGENT_MESSAGES', {
+        agentId: chatAgentId,
+        messages: [
+          {
+            id,
+            chat_agent_id: chatAgentId,
+            content,
+            role,
+            status,
+            created_at,
+          },
+        ],
+      });
+    }
   };
 }
 

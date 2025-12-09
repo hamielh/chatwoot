@@ -40,7 +40,8 @@ class Api::V1::Accounts::ChatAgentsController < Api::V1::Accounts::BaseControlle
       :position,
       :icon,
       :enabled,
-      allowed_roles: []
+      allowed_roles: [],
+      webhook_params: {}
     )
   end
 

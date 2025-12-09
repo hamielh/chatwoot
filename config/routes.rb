@@ -113,8 +113,8 @@ Rails.application.routes.draw do
           resources :chat_agents, only: [:index, :show, :create, :update, :destroy] do
             scope module: :chat_agents do
               resources :messages, only: [:index, :create]
+              post 'messages/send', to: 'messages#send_message'
               delete 'messages', to: 'messages#destroy_all'
-              post 'callback', to: 'messages#callback'
             end
           end
           namespace :channels do

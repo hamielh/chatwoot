@@ -19,6 +19,12 @@ class Webhooks::WhatsappApiEventsJob < ApplicationJob
       return
     end
 
+    # Ignorar mensagens do histórico
+    if params['fromhistory'] == true || params['fromhistory'] == 'true'
+      Rails.logger.info('WhatsappApiEventsJob - Ignoring history message')
+      return
+    end
+
     Rails.logger.info("WhatsappApiEventsJob - Processing message for inbox #{inbox.id}")
 
     # Processar mensagem

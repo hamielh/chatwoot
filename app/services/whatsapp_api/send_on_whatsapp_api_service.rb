@@ -22,18 +22,31 @@ class WhatsappApi::SendOnWhatsappApiService < Base::SendOnChannelService
     chat_suffix = is_group ? '@g.us' : '@s.whatsapp.net'
 
     payload = {
-      text: message.content
+      text: message.content.presence || ''
     }
 
     if message.attachments.any?
       attachment = message.attachments.first
-      payload[:attachment] = rails_blob_url(attachment.file)
+
+      # Baixar arquivo e converter para base64
+      file_data = attachment.file.download
+      base64_data = Base64.strict_encode64(file_data)
+      mime_type = attachment.file.content_type || 'application/octet-stream'
+
+      # Converter áudios para formato PTT (áudio de voz com waveform)
+      # Quepasa detecta PTT automaticamente com estes MIME types
+      mime_type = 'audio/ogg; codecs=opus' if mime_type.start_with?('audio/')
+
+      # Quepasa espera o formato: data:MIME_TYPE;base64,BASE64_DATA
+      payload[:content] = "data:#{mime_type};base64,#{base64_data}"
     end
 
     if message.in_reply_to.present?
       replied_message = message.conversation.messages.find_by(id: message.in_reply_to)
       payload[:inreply] = replied_message.source_id if replied_message&.source_id.present?
     end
+
+    Rails.logger.info "Quepasa payload: #{payload.inspect}"
 
     response = HTTParty.post(
       "#{base_url}/v3/bot/#{token}/send",
@@ -63,11 +76,5 @@ class WhatsappApi::SendOnWhatsappApiService < Base::SendOnChannelService
     Rails.logger.error "WhatsappApi::SendOnWhatsappApiService error: #{e.message}"
     Rails.logger.error e.backtrace.join("\n")
     message.update!(status: :failed)
-  end
-
-  def rails_blob_url(file)
-    return nil unless file.attached?
-
-    Rails.application.routes.url_helpers.rails_blob_url(file, host: ENV.fetch('FRONTEND_URL', 'http://localhost:3000'))
   end
 end

@@ -6,3 +6,4 @@ json.description chat_agent.description
 json.allowed_roles chat_agent.allowed_roles
 json.position chat_agent.position
 json.enabled chat_agent.enabled
+json.webhook_params chat_agent.webhook_params

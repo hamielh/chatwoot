@@ -7,9 +7,11 @@ class ChatAgents::WebhookJob < ApplicationJob
 
     Rails.logger.info "ChatAgentWebhookJob: Processing message #{message_id} for agent #{chat_agent.id}"
 
-    # Prepare payload - SIMPLES!
+    # Prepare payload
     payload = {
+      action: 'message',
       message: message.content,
+      custom_params: chat_agent.webhook_params,
       user_id: message.user_id,
       account_id: message.account_id,
       agent_id: chat_agent.id
@@ -27,15 +29,7 @@ class ChatAgents::WebhookJob < ApplicationJob
 
     Rails.logger.info "ChatAgentWebhookJob: Webhook response status=#{response.code} body=#{response.body}"
 
-    # If webhook responds immediately (sync mode), save the response
-    if response.success? && response.parsed_response.is_a?(Hash) && response.parsed_response['message'].present?
-      Rails.logger.info "ChatAgentWebhookJob: Creating assistant message with response"
-      handle_sync_response(message, response.parsed_response['message'])
-    else
-      Rails.logger.info "ChatAgentWebhookJob: No sync response, waiting for callback"
-    end
-
-    # Mark user message as completed (mesmo que não tenha resposta síncrona)
+    # Mark user message as completed - response will come via callback
     message.update!(status: 'completed')
     broadcast_message(message)
   rescue StandardError => e
@@ -46,21 +40,7 @@ class ChatAgents::WebhookJob < ApplicationJob
 
   private
 
-  def handle_sync_response(user_message, response_content)
-    # Create assistant message with the response
-    assistant_message = user_message.chat_agent.chat_agent_messages.create!(
-      content: response_content,
-      role: 'assistant',
-      status: 'completed',
-      account_id: user_message.account_id,
-      user_id: user_message.user_id
-    )
-
-    # Broadcast assistant message
-    broadcast_message(assistant_message)
-  end
-
-  def mark_as_error(message, error_message)
+  def mark_as_error(message, _error_message)
     message.update!(status: 'error')
     broadcast_message(message)
   end

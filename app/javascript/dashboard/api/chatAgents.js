@@ -1,3 +1,4 @@
+import axios from 'axios';
 import ApiClient from './ApiClient';
 
 class ChatAgentsAPI extends ApiClient {
@@ -10,7 +11,7 @@ class ChatAgentsAPI extends ApiClient {
   }
 
   sendMessage(agentId, message) {
-    return axios.post(`${this.url}/${agentId}/messages`, { message });
+    return axios.post(`${this.url}/${agentId}/messages/send`, { message });
   }
 
   clearMessages(agentId) {

@@ -5,7 +5,7 @@ class Api::V1::Accounts::ChatAgents::MessagesController < Api::V1::Accounts::Bas
 
   def index; end
 
-  def create
+  def send_message
     # Save user message with processing status
     @user_message = @chat_agent.chat_agent_messages.create!(
       content: permitted_params[:message],
@@ -25,17 +25,15 @@ class Api::V1::Accounts::ChatAgents::MessagesController < Api::V1::Accounts::Bas
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
-  def callback
-    message_content = params[:message]
+  def create
+    message_content = permitted_params[:content]
 
-    Rails.logger.info "=== ChatAgent Callback START ==="
+    Rails.logger.info '=== ChatAgent Create Message START ==='
     Rails.logger.info "Account ID: #{Current.account.id}"
     Rails.logger.info "Chat Agent ID: #{@chat_agent.id}"
     Rails.logger.info "Message content: #{message_content}"
 
-    unless message_content.present?
-      return render json: { error: 'Missing message' }, status: :bad_request
-    end
+    return render json: { error: 'Missing content' }, status: :bad_request unless message_content.present?
 
     # Create assistant response message
     @message = @chat_agent.chat_agent_messages.create!(
@@ -52,17 +50,22 @@ class Api::V1::Accounts::ChatAgents::MessagesController < Api::V1::Accounts::Bas
     broadcast_message(@message)
 
     Rails.logger.info "Broadcast sent to channel: accounts:#{@message.account_id}:chat_agents"
-    Rails.logger.info "=== ChatAgent Callback END ==="
+    Rails.logger.info '=== ChatAgent Create Message END ==='
 
     render json: { status: 'success', message_id: @message.id }, status: :ok
   rescue StandardError => e
-    Rails.logger.error "ChatAgent callback error: #{e.message}"
+    Rails.logger.error "ChatAgent create message error: #{e.message}"
     Rails.logger.error e.backtrace.join("\n")
     render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def destroy_all
+    # Delete all messages locally
     @chat_agent.chat_agent_messages.destroy_all
+
+    # Notify external API to clear memory/context
+    notify_clear_history(@chat_agent)
+
     head :no_content
   end
 
@@ -77,7 +80,32 @@ class Api::V1::Accounts::ChatAgents::MessagesController < Api::V1::Accounts::Bas
   end
 
   def permitted_params
-    params.permit(:message, :chat_agent_id)
+    params.permit(:message, :content, :chat_agent_id)
+  end
+
+  def notify_clear_history(chat_agent)
+    payload = {
+      action: 'clear_history',
+      message: '',
+      custom_params: chat_agent.webhook_params,
+      agent_id: chat_agent.id,
+      account_id: Current.account.id,
+      user_id: Current.user.id
+    }
+
+    Rails.logger.info "Notifying external API to clear history: #{chat_agent.webhook_url}"
+
+    # Call webhook asynchronously (fire and forget)
+    Thread.new do
+      HTTParty.post(
+        chat_agent.webhook_url,
+        body: payload.to_json,
+        headers: { 'Content-Type' => 'application/json' },
+        timeout: 10
+      )
+    rescue StandardError => e
+      Rails.logger.error "Failed to notify clear history: #{e.message}"
+    end
   end
 
   def broadcast_message(message)

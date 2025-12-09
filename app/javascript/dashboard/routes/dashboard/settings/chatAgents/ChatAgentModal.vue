@@ -37,13 +37,19 @@ export default {
         icon: 'i-lucide-app-window',
         enabled: true,
         allowed_roles: [],
+        webhook_params: {},
       },
+      webhookParamsList: [],
       availableIcons: [
         { key: 'i-lucide-app-window', label: 'App Window', category: 'Apps' },
         { key: 'i-lucide-bot', label: 'Bot', category: 'AI' },
         { key: 'i-lucide-sparkles', label: 'Sparkles', category: 'AI' },
         { key: 'i-lucide-brain', label: 'Brain', category: 'AI' },
-        { key: 'i-lucide-message-square', label: 'Chat', category: 'Communication' },
+        {
+          key: 'i-lucide-message-square',
+          label: 'Chat',
+          category: 'Communication',
+        },
         { key: 'i-lucide-cpu', label: 'CPU', category: 'Tech' },
         { key: 'i-lucide-zap', label: 'Lightning', category: 'Speed' },
         { key: 'i-lucide-rocket', label: 'Rocket', category: 'Marketing' },
@@ -75,7 +81,16 @@ export default {
         icon: this.selectedAgent.icon || 'i-lucide-app-window',
         enabled: this.selectedAgent.enabled,
         allowed_roles: this.selectedAgent.allowed_roles || [],
+        webhook_params: this.selectedAgent.webhook_params || {},
       };
+
+      // Convert webhook_params object to array for editing
+      this.webhookParamsList = Object.entries(
+        this.agent.webhook_params || {}
+      ).map(([key, value]) => ({
+        key,
+        value,
+      }));
     }
   },
   methods: {
@@ -88,8 +103,26 @@ export default {
         icon: 'i-lucide-app-window',
         enabled: true,
         allowed_roles: [],
+        webhook_params: {},
       };
+      this.webhookParamsList = [];
       this.$emit('close');
+    },
+    addWebhookParam() {
+      this.webhookParamsList.push({ key: '', value: '' });
+    },
+    removeWebhookParam(index) {
+      this.webhookParamsList.splice(index, 1);
+    },
+    updateWebhookParams() {
+      // Convert array to object before submitting
+      const params = {};
+      this.webhookParamsList.forEach(param => {
+        if (param.key && param.key.trim()) {
+          params[param.key.trim()] = param.value || '';
+        }
+      });
+      this.agent.webhook_params = params;
     },
     toggleRole(roleKey) {
       const index = this.agent.allowed_roles.indexOf(roleKey);
@@ -109,12 +142,20 @@ export default {
         return;
       }
 
+      // Update webhook_params from list
+      this.updateWebhookParams();
+
       try {
         if (this.mode === 'create') {
-          await this.$store.dispatch('chatAgents/create', { chat_agent: this.agent });
+          await this.$store.dispatch('chatAgents/create', {
+            chat_agent: this.agent,
+          });
           useAlert(this.$t(`CHAT_AGENTS.${this.mode}.API_SUCCESS`));
         } else {
-          await this.$store.dispatch('chatAgents/update', { id: this.selectedAgent.id, chat_agent: this.agent });
+          await this.$store.dispatch('chatAgents/update', {
+            id: this.selectedAgent.id,
+            chat_agent: this.agent,
+          });
           useAlert(this.$t(`CHAT_AGENTS.${this.mode}.API_SUCCESS`));
         }
         this.closeModal();
@@ -140,19 +181,17 @@ export default {
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
     @click.self="closeModal"
   >
-    <div class="bg-n-background rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div
+      class="bg-n-background rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
+    >
       <!-- Header -->
-      <div class="flex items-center justify-between p-6 border-b border-n-border">
+      <div
+        class="flex items-center justify-between p-6 border-b border-n-border"
+      >
         <h2 class="text-xl font-semibold text-n-slate-12">
           {{ header }}
         </h2>
-        <NextButton
-          icon="i-lucide-x"
-          xs
-          slate
-          faded
-          @click="closeModal"
-        />
+        <NextButton icon="i-lucide-x" xs slate faded @click="closeModal" />
       </div>
 
       <!-- Body -->
@@ -190,7 +229,10 @@ export default {
             @input="v$.agent.webhook_url.$touch"
             @blur="v$.agent.webhook_url.$touch"
           />
-          <p v-if="v$.agent.webhook_url.$error" class="mt-1 text-xs text-ruby-600">
+          <p
+            v-if="v$.agent.webhook_url.$error"
+            class="mt-1 text-xs text-ruby-600"
+          >
             {{ $t('CHAT_AGENTS.FORM.WEBHOOK_URL_ERROR') }}
           </p>
           <p class="mt-1 text-xs text-n-slate-11">
@@ -216,7 +258,9 @@ export default {
           <label class="block mb-2 text-sm font-medium text-n-slate-12">
             {{ $t('CHAT_AGENTS.FORM.ICON_LABEL') }}
           </label>
-          <div class="grid grid-cols-5 gap-2 p-3 border rounded-md border-n-border bg-n-background">
+          <div
+            class="grid grid-cols-5 gap-2 p-3 border rounded-md border-n-border bg-n-background"
+          >
             <button
               v-for="icon in availableIcons"
               :key="icon.key"
@@ -289,19 +333,69 @@ export default {
             {{ $t('CHAT_AGENTS.FORM.ROLES_HELP') }}
           </p>
         </div>
+
+        <!-- Custom Parameters -->
+        <div class="w-full">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-sm font-medium text-n-slate-12">
+              {{ $t('CHAT_AGENTS.FORM.WEBHOOK_PARAMS_LABEL') }}
+            </label>
+            <NextButton icon="i-lucide-plus" xs slate @click="addWebhookParam">
+              {{ $t('CHAT_AGENTS.FORM.ADD_PARAM') }}
+            </NextButton>
+          </div>
+          <p class="text-xs text-n-slate-11 mb-3">
+            {{ $t('CHAT_AGENTS.FORM.WEBHOOK_PARAMS_HELP') }}
+          </p>
+
+          <div v-if="webhookParamsList.length > 0" class="space-y-2">
+            <div
+              v-for="(param, index) in webhookParamsList"
+              :key="index"
+              class="flex gap-2"
+            >
+              <input
+                v-model="param.key"
+                type="text"
+                :placeholder="$t('CHAT_AGENTS.FORM.PARAM_KEY_PLACEHOLDER')"
+                class="flex-1 px-3 py-2 border rounded-md bg-n-background border-n-border text-n-slate-12 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
+              />
+              <input
+                v-model="param.value"
+                type="text"
+                :placeholder="$t('CHAT_AGENTS.FORM.PARAM_VALUE_PLACEHOLDER')"
+                class="flex-1 px-3 py-2 border rounded-md bg-n-background border-n-border text-n-slate-12 focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
+              />
+              <NextButton
+                icon="i-lucide-trash-2"
+                xs
+                ruby
+                faded
+                @click="removeWebhookParam(index)"
+              />
+            </div>
+          </div>
+
+          <div
+            v-else
+            class="text-center py-8 border-2 border-dashed rounded-md border-n-border"
+          >
+            <span class="i-lucide-settings text-3xl text-n-slate-9 mb-2" />
+            <p class="text-sm text-n-slate-11">
+              {{ $t('CHAT_AGENTS.FORM.NO_PARAMS') }}
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Footer -->
-      <div class="flex items-center justify-end gap-2 p-6 border-t border-n-border">
-        <NextButton
-          slate
-          @click="closeModal"
-        >
+      <div
+        class="flex items-center justify-end gap-2 p-6 border-t border-n-border"
+      >
+        <NextButton slate @click="closeModal">
           {{ $t('CHAT_AGENTS.FORM.CANCEL') }}
         </NextButton>
-        <NextButton
-          @click="submitForm"
-        >
+        <NextButton @click="submitForm">
           {{ submitButtonLabel }}
         </NextButton>
       </div>
