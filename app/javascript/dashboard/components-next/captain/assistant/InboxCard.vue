@@ -34,7 +34,18 @@ const inboxName = computed(() => {
 
   const isTwilioChannel = inbox.channel_type === INBOX_TYPES.TWILIO;
   const isWhatsAppChannel = inbox.channel_type === INBOX_TYPES.WHATSAPP;
+  const isWhatsAppApiChannel = inbox.channel_type === INBOX_TYPES.WHATSAPP_API;
   const isEmailChannel = inbox.channel_type === INBOX_TYPES.EMAIL;
+
+  if (isWhatsAppApiChannel) {
+    const wid = inbox.provider_config?.wid;
+    if (wid) {
+      // Extrair apenas o número do WID (ex: "556697177520:32@s.whatsapp.net" -> "556697177520")
+      const phoneNumber = wid.split(':')[0];
+      return `${inbox.name} (${phoneNumber})`;
+    }
+    return inbox.name;
+  }
 
   if (isTwilioChannel || isWhatsAppChannel) {
     const identifier = inbox.messaging_service_sid || inbox.phone_number;

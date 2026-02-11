@@ -103,6 +103,11 @@ class Api::V1::Accounts::ConversationsController < Api::V1::Accounts::BaseContro
     head :ok
   end
 
+  def toggle_bot
+    @conversation.update!(bot_enabled: params[:bot_enabled])
+    render json: { bot_enabled: @conversation.bot_enabled, conversation_id: @conversation.display_id }
+  end
+
   def toggle_typing_status
     typing_status_manager = ::Conversations::TypingStatusManager.new(@conversation, current_user, params)
     typing_status_manager.toggle_typing_status

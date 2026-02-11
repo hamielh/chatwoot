@@ -12,6 +12,7 @@ import ComposeConversation from 'dashboard/components-next/NewConversation/Compo
 import { BUS_EVENTS } from 'shared/constants/busEvents';
 import NextButton from 'dashboard/components-next/button/Button.vue';
 import VoiceCallButton from 'dashboard/components-next/Contacts/VoiceCallButton.vue';
+import ToggleSwitch from 'dashboard/components-next/switch/Switch.vue';
 
 import {
   isAConversationRoute,
@@ -30,6 +31,7 @@ export default {
     SocialIcons,
     ContactMergeModal,
     VoiceCallButton,
+    ToggleSwitch,
   },
   props: {
     contact: {
@@ -39,6 +41,10 @@ export default {
     showAvatar: {
       type: Boolean,
       default: true,
+    },
+    conversationId: {
+      type: [Number, String],
+      default: null,
     },
   },
   emits: ['panelClose'],
@@ -56,7 +62,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({ uiFlags: 'contacts/getUIFlags' }),
+    ...mapGetters({
+      uiFlags: 'contacts/getUIFlags',
+      currentChat: 'getSelectedChat',
+    }),
+    isBotEnabled() {
+      return this.currentChat?.bot_enabled ?? true;
+    },
     contactProfileLink() {
       return `/app/accounts/${this.$route.params.accountId}/contacts/${this.contact.id}`;
     },
@@ -103,6 +115,13 @@ export default {
   },
   methods: {
     dynamicTime,
+    toggleBot() {
+      if (!this.conversationId) return;
+      this.$store.dispatch('toggleBotEnabled', {
+        conversationId: this.conversationId,
+        botEnabled: !this.isBotEnabled,
+      });
+    },
     toggleEditModal() {
       this.showEditModal = !this.showEditModal;
     },
@@ -262,6 +281,18 @@ export default {
           />
           <SocialIcons :social-profiles="socialProfiles" />
         </div>
+      </div>
+      <div
+        v-if="conversationId"
+        class="flex items-center gap-2 w-full mt-0.5 ltr:-ml-1 rtl:-mr-1"
+      >
+        <span
+          class="i-lucide-bot text-sm text-n-slate-11 flex-shrink-0 ltr:ml-1 rtl:mr-1"
+        />
+        <span class="text-sm text-n-slate-11">
+          {{ $t('CONTACT_PANEL.BOT_TOGGLE') }}
+        </span>
+        <ToggleSwitch :model-value="isBotEnabled" @change="toggleBot" />
       </div>
       <div class="flex items-center w-full mt-0.5 gap-2">
         <ComposeConversation

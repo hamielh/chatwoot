@@ -154,6 +154,7 @@ Rails.application.routes.draw do
               post :transcript
               post :toggle_status
               post :toggle_priority
+              post :toggle_bot
               post :toggle_typing_status
               post :update_last_seen
               post :unread

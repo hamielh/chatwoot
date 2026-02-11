@@ -16,6 +16,7 @@ class Integrations::BotProcessorService
     return if message.private?
     return unless processable_message?(message)
     return unless conversation.pending?
+    return unless conversation.bot_enabled?
 
     true
   end

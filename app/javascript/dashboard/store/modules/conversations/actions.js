@@ -475,6 +475,15 @@ const actions = {
     commit(types.UPDATE_CHAT_LIST_FILTERS, data);
   },
 
+  toggleBotEnabled: async ({ commit }, { conversationId, botEnabled }) => {
+    try {
+      await ConversationApi.toggleBot({ conversationId, botEnabled });
+      commit(types.TOGGLE_BOT_ENABLED, { conversationId, botEnabled });
+    } catch (error) {
+      // Handle error
+    }
+  },
+
   assignPriority: async ({ dispatch }, { conversationId, priority }) => {
     try {
       await ConversationApi.togglePriority({

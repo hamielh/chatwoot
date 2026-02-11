@@ -116,6 +116,18 @@ export const mutations = {
     chat.priority = priority;
   },
 
+  [types.TOGGLE_BOT_ENABLED](_state, { conversationId, botEnabled }) {
+    const index = _state.allConversations.findIndex(
+      c => c.id === conversationId
+    );
+    if (index > -1) {
+      _state.allConversations[index] = {
+        ..._state.allConversations[index],
+        bot_enabled: botEnabled,
+      };
+    }
+  },
+
   [types.UPDATE_CONVERSATION_CUSTOM_ATTRIBUTES](_state, custom_attributes) {
     const [chat] = getSelectedChatConversation(_state);
     chat.custom_attributes = custom_attributes;

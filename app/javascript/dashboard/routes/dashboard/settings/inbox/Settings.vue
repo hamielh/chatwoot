@@ -219,6 +219,15 @@ export default {
           this.inbox.messaging_service_sid || this.inbox.phone_number
         })`;
       }
+      if (this.isAWhatsAppApiChannel) {
+        const wid = this.inbox.provider_config?.wid;
+        if (wid) {
+          // Extrair apenas o número do WID (ex: "556697177520:32@s.whatsapp.net" -> "556697177520")
+          const phoneNumber = wid.split(':')[0];
+          return `${this.inbox.name} (${phoneNumber})`;
+        }
+        return this.inbox.name;
+      }
       if (this.isAWhatsAppChannel) {
         return `${this.inbox.name} (${this.inbox.phone_number})`;
       }

@@ -15,7 +15,7 @@ class ContactInboxBuilder
     case @inbox.channel_type
     when 'Channel::TwilioSms'
       twilio_source_id
-    when 'Channel::Whatsapp'
+    when 'Channel::Whatsapp', 'Channel::WhatsappApi'
       wa_source_id
     when 'Channel::Email'
       email_source_id
@@ -92,7 +92,7 @@ class ContactInboxBuilder
   end
 
   def new_source_id
-    if @inbox.whatsapp? || @inbox.sms? || @inbox.twilio?
+    if @inbox.whatsapp? || @inbox.whatsapp_api? || @inbox.sms? || @inbox.twilio?
       "whatsapp:#{@source_id}#{rand(100)}"
     else
       "#{rand(10)}#{@source_id}"
@@ -100,7 +100,7 @@ class ContactInboxBuilder
   end
 
   def allowed_channels?
-    @inbox.email? || @inbox.sms? || @inbox.twilio? || @inbox.whatsapp?
+    @inbox.email? || @inbox.sms? || @inbox.twilio? || @inbox.whatsapp? || @inbox.whatsapp_api?
   end
 end
 

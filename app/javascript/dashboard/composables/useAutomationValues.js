@@ -78,6 +78,11 @@ export default function useAutomationValues() {
     }))
   );
 
+  const botEnabledOptions = computed(() => [
+    { id: true, name: t('AUTOMATION.BOT_ENABLED_TYPES.ENABLED') },
+    { id: false, name: t('AUTOMATION.BOT_ENABLED_TYPES.DISABLED') },
+  ]);
+
   /**
    * Adds a translated "None" option to the beginning of a list
    * @param {Array} list - The list to add "None" to
@@ -130,6 +135,7 @@ export default function useAutomationValues() {
       type,
       addNoneToListFn: addNoneToList,
       priorityOptions: priorityOptions.value,
+      botEnabledOptions: botEnabledOptions.value,
     });
   };
 

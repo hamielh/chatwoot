@@ -43,6 +43,7 @@
         "CREATE_LABEL": "Create new label"
       }
     },
+    "BOT_TOGGLE": "Habilitar Bot",
     "MERGE_CONTACT": "Merge contact",
     "CONTACT_ACTIONS": "Contact actions",
     "MUTE_CONTACT": "Block Contact",

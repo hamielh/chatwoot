@@ -30,6 +30,15 @@ class ActionService
     @conversation.update!(priority: (priority[0] == 'nil' ? nil : priority[0]))
   end
 
+  def change_bot_enabled(params)
+    value = params[0]
+    value = value['id'] if value.is_a?(Hash)
+    value = ActiveModel::Type::Boolean.new.cast(value)
+    return if @conversation.bot_enabled == value
+
+    @conversation.update!(bot_enabled: value)
+  end
+
   def add_label(labels)
     return if labels.empty?
 
