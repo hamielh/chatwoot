@@ -1,5 +1,5 @@
 <script>
-import { defineAsyncComponent, ref } from 'vue';
+import { defineAsyncComponent, ref, computed } from 'vue';
 
 import NextSidebar from 'next/sidebar/Sidebar.vue';
 import WootKeyShortcutModal from 'dashboard/components/widgets/modal/WootKeyShortcutModal.vue';
@@ -16,12 +16,17 @@ const CommandBar = defineAsyncComponent(
   () => import('./commands/commandbar.vue')
 );
 
+const FloatingCallWidget = defineAsyncComponent(
+  () => import('dashboard/components/widgets/FloatingCallWidget.vue')
+);
+
 import CopilotLauncher from 'dashboard/components-next/copilot/CopilotLauncher.vue';
 import CopilotContainer from 'dashboard/components/copilot/CopilotContainer.vue';
 import ChatAgentLauncher from 'dashboard/components-next/chatAgent/ChatAgentLauncher.vue';
 import ChatAgentContainer from 'dashboard/components-next/chatAgent/ChatAgentContainer.vue';
 
 import MobileSidebarLauncher from 'dashboard/components-next/sidebar/MobileSidebarLauncher.vue';
+import { useCallsStore } from 'dashboard/stores/calls';
 
 export default {
   components: {
@@ -34,6 +39,7 @@ export default {
     CopilotContainer,
     ChatAgentLauncher,
     ChatAgentContainer,
+    FloatingCallWidget,
     MobileSidebarLauncher,
   },
   setup() {
@@ -41,6 +47,7 @@ export default {
     const { uiSettings, updateUISettings } = useUISettings();
     const { accountId } = useAccount();
     const { width: windowWidth } = useWindowSize();
+    const callsStore = useCallsStore();
 
     return {
       uiSettings,
@@ -48,6 +55,8 @@ export default {
       accountId,
       upgradePageRef,
       windowWidth,
+      hasActiveCall: computed(() => callsStore.hasActiveCall),
+      hasIncomingCall: computed(() => callsStore.hasIncomingCall),
     };
   },
   data() {
@@ -135,7 +144,9 @@ export default {
       @close-mobile-sidebar="closeMobileSidebar"
     />
 
-    <main class="flex flex-1 h-full w-full min-h-0 px-0 overflow-hidden">
+    <main
+      class="flex flex-1 h-full w-full min-h-0 px-0 overflow-hidden bg-n-surface-1"
+    >
       <UpgradePage
         v-show="showUpgradePage"
         ref="upgradePageRef"
@@ -157,6 +168,7 @@ export default {
         />
         <ChatAgentContainer />
         <CopilotContainer />
+        <FloatingCallWidget v-if="hasActiveCall || hasIncomingCall" />
       </template>
       <AddAccountModal
         :show="showCreateAccountModal"

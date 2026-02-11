@@ -18,6 +18,10 @@ const { attachment } = defineProps({
     type: Object,
     required: true,
   },
+  showTranscribedText: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 defineOptions({
@@ -204,7 +208,7 @@ const downloadAudio = async () => {
     </div>
 
     <div
-      v-if="attachment.transcribedText"
+      v-if="attachment.transcribedText && showTranscribedText"
       class="text-n-slate-12 p-3 text-sm bg-n-alpha-1 rounded-lg w-full break-words"
     >
       {{ attachment.transcribedText }}
