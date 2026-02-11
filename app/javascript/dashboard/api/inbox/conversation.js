@@ -62,11 +62,16 @@ class ConversationApi extends ApiClient {
     });
   }
 
+  toggleBot({ conversationId, botEnabled }) {
+    return axios.post(`${this.url}/${conversationId}/toggle_bot`, {
+      bot_enabled: botEnabled,
+    });
+  }
+
   assignAgent({ conversationId, agentId }) {
-    return axios.post(
-      `${this.url}/${conversationId}/assignments?assignee_id=${agentId}`,
-      {}
-    );
+    return axios.post(`${this.url}/${conversationId}/assignments`, {
+      assignee_id: agentId,
+    });
   }
 
   assignTeam({ conversationId, teamId }) {

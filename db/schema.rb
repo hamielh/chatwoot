@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_26_151150) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_26_120000) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -624,6 +624,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_26_151150) do
     t.bigint "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "contacts_count", default: 0, null: false
     t.index ["account_id", "domain"], name: "index_companies_on_account_and_domain", unique: true, where: "(domain IS NOT NULL)"
     t.index ["account_id"], name: "index_companies_on_account_id"
     t.index ["name", "account_id"], name: "index_companies_on_name_and_account_id"
@@ -632,7 +633,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_26_151150) do
   create_table "contact_inboxes", force: :cascade do |t|
     t.bigint "contact_id"
     t.bigint "inbox_id"
-    t.string "source_id", null: false
+    t.text "source_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "hmac_verified", default: false
@@ -714,6 +715,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_26_151150) do
     t.bigint "sla_policy_id"
     t.datetime "waiting_since"
     t.text "cached_label_list"
+    t.bigint "assignee_agent_bot_id"
+    t.boolean "bot_enabled", default: true, null: false
     t.index ["account_id", "display_id"], name: "index_conversations_on_account_id_and_display_id", unique: true
     t.index ["account_id", "id"], name: "index_conversations_on_id_and_account_id"
     t.index ["account_id", "inbox_id", "status", "assignee_id"], name: "conv_acid_inbid_stat_asgnid_idx"
@@ -999,7 +1002,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_26_151150) do
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "private", default: false, null: false
     t.integer "status", default: 0
-    t.string "source_id"
+    t.text "source_id"
     t.integer "content_type", default: 0, null: false
     t.json "content_attributes", default: {}
     t.string "sender_type"

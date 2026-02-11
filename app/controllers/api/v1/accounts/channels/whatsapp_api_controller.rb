@@ -23,10 +23,16 @@ class Api::V1::Accounts::Channels::WhatsappApiController < Api::V1::Accounts::Ba
 
     if response&.success?
       data = JSON.parse(response.body)
-      Rails.logger.info("Quepasa /info response: #{data.inspect}")
+      Rails.logger.info("Quepasa /info response COMPLETO: #{data.inspect}")
 
-      # Retorna o objeto 'server' que contém os dados de conexão
-      render json: data['server'] || {}
+      # Se não tem o objeto 'server', significa que ainda não conectou
+      if data['server'].present?
+        Rails.logger.info("Conexão encontrada: #{data['server'].inspect}")
+        render json: data['server']
+      else
+        Rails.logger.warn("Conexão ainda não estabelecida. Resposta: #{data.inspect}")
+        render json: { verified: false, connected: false }
+      end
     else
       error_msg = response&.body || 'Failed to get connection info'
       Rails.logger.error("Quepasa /info error: #{error_msg}")
@@ -103,7 +109,7 @@ class Api::V1::Accounts::Channels::WhatsappApiController < Api::V1::Accounts::Ba
   end
 
   def setup_webhook
-    base_url = ENV['QUEPASA_API_URL'] || 'https://pixel-quepasa.f7unst.easypanel.host'
+    base_url = InstallationConfig.find_by(name: 'QUEPASA_API_URL')&.value
     token = @channel.provider_config['token']
     inbox_id = @channel.inbox.id
 
@@ -140,11 +146,18 @@ class Api::V1::Accounts::Channels::WhatsappApiController < Api::V1::Accounts::Ba
   end
 
   def make_quepasa_request(endpoint, method: :get)
-    base_url = ENV['QUEPASA_API_URL'] || 'https://pixel-quepasa.f7unst.easypanel.host'
+    base_url = InstallationConfig.find_by(name: 'QUEPASA_API_URL')&.value
 
-    # Gera um token único para este canal baseado no ID
-    token = @channel.provider_config['token'] || "chatwoot-#{@channel.id}"
-    user = ENV['QUEPASA_API_USER'] || 'hamielhenrique29@gmail.com'
+    # Gera um token único para este canal (20 caracteres aleatórios)
+    token = @channel.provider_config['token']
+
+    unless token
+      token = SecureRandom.alphanumeric(20).downcase
+      @channel.update!(provider_config: @channel.provider_config.merge(token: token))
+      Rails.logger.info("Token gerado e salvo para o canal #{@channel.id}: #{token}")
+    end
+
+    user = InstallationConfig.find_by(name: 'QUEPASA_API_USER')&.value
 
     # A API do Quepasa usa query params, não path params
     url = "#{base_url}#{endpoint}?token=#{token}&user=#{CGI.escape(user)}"

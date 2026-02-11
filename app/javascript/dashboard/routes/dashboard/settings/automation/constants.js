@@ -57,6 +57,12 @@ export const AUTOMATIONS = {
         filterOperators: OPERATOR_TYPES_1,
       },
       {
+        key: 'bot_enabled',
+        name: 'BOT_ENABLED',
+        inputType: 'search_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+      {
         key: 'conversation_language',
         name: 'CONVERSATION_LANGUAGE',
         inputType: 'multi_select',
@@ -128,6 +134,10 @@ export const AUTOMATIONS = {
         key: 'send_attachment',
         name: 'SEND_ATTACHMENT',
       },
+      {
+        key: 'change_bot_enabled',
+        name: 'CHANGE_BOT_ENABLED',
+      },
     ],
   },
   conversation_created: {
@@ -193,6 +203,12 @@ export const AUTOMATIONS = {
         filterOperators: OPERATOR_TYPES_1,
       },
       {
+        key: 'bot_enabled',
+        name: 'BOT_ENABLED',
+        inputType: 'search_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+      {
         key: 'labels',
         name: 'LABELS',
         inputType: 'multi_select',
@@ -243,6 +259,10 @@ export const AUTOMATIONS = {
       {
         key: 'send_attachment',
         name: 'SEND_ATTACHMENT',
+      },
+      {
+        key: 'change_bot_enabled',
+        name: 'CHANGE_BOT_ENABLED',
       },
     ],
   },
@@ -321,6 +341,12 @@ export const AUTOMATIONS = {
         filterOperators: OPERATOR_TYPES_1,
       },
       {
+        key: 'bot_enabled',
+        name: 'BOT_ENABLED',
+        inputType: 'search_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+      {
         key: 'labels',
         name: 'LABELS',
         inputType: 'multi_select',
@@ -371,6 +397,10 @@ export const AUTOMATIONS = {
       {
         key: 'send_attachment',
         name: 'SEND_ATTACHMENT',
+      },
+      {
+        key: 'change_bot_enabled',
+        name: 'CHANGE_BOT_ENABLED',
       },
     ],
   },
@@ -443,6 +473,12 @@ export const AUTOMATIONS = {
         filterOperators: OPERATOR_TYPES_1,
       },
       {
+        key: 'bot_enabled',
+        name: 'BOT_ENABLED',
+        inputType: 'search_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
+      {
         key: 'labels',
         name: 'LABELS',
         inputType: 'multi_select',
@@ -489,6 +525,10 @@ export const AUTOMATIONS = {
       {
         key: 'send_attachment',
         name: 'SEND_ATTACHMENT',
+      },
+      {
+        key: 'change_bot_enabled',
+        name: 'CHANGE_BOT_ENABLED',
       },
     ],
   },
@@ -560,6 +600,12 @@ export const AUTOMATIONS = {
         inputType: 'multi_select',
         filterOperators: OPERATOR_TYPES_1,
       },
+      {
+        key: 'bot_enabled',
+        name: 'BOT_ENABLED',
+        inputType: 'search_select',
+        filterOperators: OPERATOR_TYPES_1,
+      },
     ],
     actions: [
       {
@@ -589,6 +635,10 @@ export const AUTOMATIONS = {
       {
         key: 'send_attachment',
         name: 'SEND_ATTACHMENT',
+      },
+      {
+        key: 'change_bot_enabled',
+        name: 'CHANGE_BOT_ENABLED',
       },
     ],
   },
@@ -691,6 +741,11 @@ export const AUTOMATION_ACTION_TYPES = [
   {
     key: 'change_priority',
     label: 'CHANGE_PRIORITY',
+    inputType: 'search_select',
+  },
+  {
+    key: 'change_bot_enabled',
+    label: 'CHANGE_BOT_ENABLED',
     inputType: 'search_select',
   },
   {

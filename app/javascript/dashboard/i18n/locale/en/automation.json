@@ -149,6 +149,7 @@
       "SEND_MESSAGE": "Send a Message",
       "ADD_PRIVATE_NOTE": "Add a Private Note",
       "CHANGE_PRIORITY": "Change Priority",
+      "CHANGE_BOT_ENABLED": "Alterar Bot",
       "ADD_SLA": "Add SLA",
       "OPEN_CONVERSATION": "Open conversation"
     },
@@ -162,6 +163,10 @@
       "MEDIUM": "Medium",
       "HIGH": "High",
       "URGENT": "Urgent"
+    },
+    "BOT_ENABLED_TYPES": {
+      "ENABLED": "Ativado",
+      "DISABLED": "Desativado"
     },
     "ATTRIBUTES": {
       "MESSAGE_TYPE": "Message Type",
@@ -178,6 +183,7 @@
       "ASSIGNEE_NAME": "Assignee",
       "TEAM_NAME": "Team",
       "PRIORITY": "Priority",
+      "BOT_ENABLED": "Bot",
       "LABELS": "Labels"
     }
   }

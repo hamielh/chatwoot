@@ -17,9 +17,19 @@ export const generateLabelForContactableInboxesList = ({
   email,
   channelType,
   phoneNumber,
+  providerConfig,
 }) => {
   if (channelType === INBOX_TYPES.EMAIL) {
     return `${name} (${email})`;
+  }
+  if (channelType === INBOX_TYPES.WHATSAPP_API) {
+    const wid = providerConfig?.wid;
+    if (wid) {
+      // Extrair apenas o número do WID (ex: "556697177520:32@s.whatsapp.net" -> "556697177520")
+      const widPhone = wid.split(':')[0];
+      return `${name} (${widPhone})`;
+    }
+    return name;
   }
   if (
     channelType === INBOX_TYPES.TWILIO ||
@@ -37,6 +47,7 @@ const transformInbox = ({
   channelType,
   phoneNumber,
   medium,
+  providerConfig,
   ...rest
 }) => ({
   id,
@@ -46,6 +57,7 @@ const transformInbox = ({
     email,
     channelType,
     phoneNumber,
+    providerConfig,
   }),
   action: 'inbox',
   value: id,
@@ -54,6 +66,7 @@ const transformInbox = ({
   phoneNumber,
   channelType,
   medium,
+  providerConfig,
   ...rest,
 });
 

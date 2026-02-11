@@ -82,7 +82,7 @@ class WhatsappApi::IncomingMessageService
     Rails.logger.info "[Avatar] Buscando avatar para contato #{@contact.id}"
     Rails.logger.info "[Avatar] Telefone original: #{original_phone} -> Ajustado: #{phone}"
 
-    base_url = ENV.fetch('QUEPASA_API_URL', 'https://pixel-quepasa.f7unst.easypanel.host')
+    base_url = InstallationConfig.find_by(name: 'QUEPASA_API_URL')&.value
     token = inbox.channel.provider_config['token']
 
     response = HTTParty.get(
@@ -252,7 +252,7 @@ class WhatsappApi::IncomingMessageService
 
     unless download_url
       message_id = message_params['id'] || message_params[:id]
-      base_url = ENV.fetch('QUEPASA_API_URL', 'https://pixel-quepasa.f7unst.easypanel.host')
+      base_url = InstallationConfig.find_by(name: 'QUEPASA_API_URL')&.value
       download_url = "#{base_url}/download/#{message_id}"
     end
 

@@ -44,6 +44,7 @@ class Inbox < ApplicationRecord
   include Avatarable
   include OutOfOffisable
   include AccountCacheRevalidator
+  include InboxAgentAvailability
 
   # Not allowing characters:
   validates :name, presence: true
@@ -153,6 +154,10 @@ class Inbox < ApplicationRecord
     channel_type == 'Channel::Whatsapp'
   end
 
+  def whatsapp_api?
+    channel_type == 'Channel::WhatsappApi'
+  end
+
   def assignable_agents
     (account.users.where(id: members.select(:user_id)) + account.administrators).uniq
   end
@@ -188,6 +193,10 @@ class Inbox < ApplicationRecord
 
   def member_ids_with_assignment_capacity
     members.ids
+  end
+
+  def auto_assignment_v2_enabled?
+    account.feature_enabled?('assignment_v2')
   end
 
   private

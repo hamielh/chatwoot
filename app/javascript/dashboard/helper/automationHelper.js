@@ -99,6 +99,7 @@ export const getActionOptions = ({
   teams,
   labels,
   slaPolicies,
+  botEnabledOptions,
   type,
   addNoneToListFn,
   priorityOptions,
@@ -110,6 +111,7 @@ export const getActionOptions = ({
     add_label: generateConditionOptions(labels, 'title'),
     remove_label: generateConditionOptions(labels, 'title'),
     change_priority: priorityOptions,
+    change_bot_enabled: botEnabledOptions,
     add_sla: slaPolicies,
   };
   return actionsMap[type];
@@ -151,6 +153,7 @@ export const getConditionOptions = ({
     country_code: countries,
     message_type: messageTypeOptions,
     priority: priorityOptions,
+    bot_enabled: booleanFilterOptions,
     labels: generateConditionOptions(labels, 'title'),
   };
 

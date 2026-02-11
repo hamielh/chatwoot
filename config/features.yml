@@ -180,7 +180,6 @@
   display_name: Captain V2
   enabled: false
   premium: true
-  chatwoot_internal: true
 - name: whatsapp_embedded_signup
   display_name: WhatsApp Embedded Signup
   enabled: false
@@ -227,3 +226,8 @@
   display_name: Chat Agents
   enabled: true
   help_url: https://chwt.app/hc/chat-agents
+- name: companies
+  display_name: Companies
+  enabled: false
+  premium: true
+  chatwoot_internal: true

@@ -28,7 +28,6 @@ import { FEATURE_FLAGS } from '../../../../featureFlags';
 import SenderNameExamplePreview from './components/SenderNameExamplePreview.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
 import { INBOX_TYPES } from 'dashboard/helper/inbox';
-import { WIDGET_BUILDER_EDITOR_MENU_OPTIONS } from 'dashboard/constants/editor';
 import { getInboxIconByType } from 'dashboard/helper/inbox';
 import Editor from 'dashboard/components-next/Editor/Editor.vue';
 
@@ -83,7 +82,6 @@ export default {
       selectedTabIndex: 0,
       selectedPortalSlug: '',
       showBusinessNameInput: false,
-      welcomeTaglineEditorMenuOptions: WIDGET_BUILDER_EDITOR_MENU_OPTIONS,
       healthData: null,
       isLoadingHealth: false,
       healthError: null,
@@ -220,6 +218,15 @@ export default {
         return `${this.inbox.name} (${
           this.inbox.messaging_service_sid || this.inbox.phone_number
         })`;
+      }
+      if (this.isAWhatsAppApiChannel) {
+        const wid = this.inbox.provider_config?.wid;
+        if (wid) {
+          // Extrair apenas o número do WID (ex: "556697177520:32@s.whatsapp.net" -> "556697177520")
+          const phoneNumber = wid.split(':')[0];
+          return `${this.inbox.name} (${phoneNumber})`;
+        }
+        return this.inbox.name;
       }
       if (this.isAWhatsAppChannel) {
         return `${this.inbox.name} (${this.inbox.phone_number})`;
@@ -638,7 +645,7 @@ export default {
               )
             "
             :max-length="255"
-            :enabled-menu-options="welcomeTaglineEditorMenuOptions"
+            channel-type="Context::InboxSettings"
           />
 
           <label v-if="isAWebWidgetInbox" class="pb-4">
