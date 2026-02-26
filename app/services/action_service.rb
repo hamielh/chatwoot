@@ -84,6 +84,8 @@ class ActionService
   end
 
   def send_email_transcript(emails)
+    return unless @account.email_transcript_enabled?
+
     emails = emails[0].gsub(/\s+/, '').split(',')
 
     emails.each do |email|

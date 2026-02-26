@@ -8,7 +8,6 @@ import DashboardApps from './DashboardApps/Index.vue';
 import CustomApps from '../apps/CustomApps/Index.vue';
 import ChatAgents from '../chatAgents/Index.vue';
 import Slack from './Slack.vue';
-import SettingsContent from '../Wrapper.vue';
 import Linear from './Linear.vue';
 import Notion from './Notion.vue';
 import Shopify from './Shopify.vue';
@@ -68,28 +67,7 @@ export default {
     },
     {
       path: frontendURL('accounts/:accountId/settings/integrations'),
-      component: SettingsContent,
-      props: params => {
-        const integrationId = params.params?.integration_id;
-        const hideHeader = ['dialogflow'].includes(integrationId);
-
-        // Don't show header
-        if (hideHeader) {
-          return {};
-        }
-
-        const showBackButton = params.name !== 'settings_integrations';
-        const backUrl =
-          params.name === 'settings_integrations_integration'
-            ? { name: 'settings_integrations' }
-            : '';
-        return {
-          headerTitle: 'INTEGRATION_SETTINGS.HEADER',
-          icon: 'flash-on',
-          showBackButton,
-          backUrl,
-        };
-      },
+      component: SettingsWrapper,
       children: [
         {
           path: 'slack',

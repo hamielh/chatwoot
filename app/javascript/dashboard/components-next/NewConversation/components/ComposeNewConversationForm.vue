@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required, requiredIf } from '@vuelidate/validators';
 import { INBOX_TYPES } from 'dashboard/helper/inbox';
@@ -37,6 +37,7 @@ const props = defineProps({
   contactsUiFlags: { type: Object, default: null },
   messageSignature: { type: String, default: '' },
   sendWithSignature: { type: Boolean, default: false },
+  formState: { type: Object, required: true },
 });
 
 const emit = defineEmits([
@@ -57,13 +58,13 @@ const showBccEmailsDropdown = ref(false);
 
 const isCreating = computed(() => props.contactConversationsUiFlags.isCreating);
 
-const state = reactive({
+const state = props.formState || {
   message: '',
   subject: '',
   ccEmails: '',
   bccEmails: '',
   attachedFiles: [],
-});
+};
 
 const inboxTypes = computed(() => ({
   isEmail: props.targetInbox?.channelType === INBOX_TYPES.EMAIL,
@@ -157,21 +158,7 @@ const isAnyDropdownActive = computed(() => {
 
 const handleContactSearch = value => {
   showContactsDropdown.value = true;
-  const query = typeof value === 'string' ? value.trim() : '';
-  const hasAlphabet = Array.from(query).some(char => {
-    const lower = char.toLowerCase();
-    const upper = char.toUpperCase();
-    return lower !== upper;
-  });
-  const isEmailLike = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(query);
-
-  const keys = ['email', 'phone_number', 'name'].filter(key => {
-    if (key === 'phone_number' && hasAlphabet) return false;
-    if (key === 'name' && isEmailLike) return false;
-    return true;
-  });
-
-  emit('searchContacts', { keys, query: value });
+  emit('searchContacts', value);
 };
 
 const handleDropdownUpdate = (type, value) => {
@@ -186,12 +173,12 @@ const handleDropdownUpdate = (type, value) => {
 
 const searchCcEmails = value => {
   showCcEmailsDropdown.value = true;
-  emit('searchContacts', { keys: ['email'], query: value });
+  emit('searchContacts', value);
 };
 
 const searchBccEmails = value => {
   showBccEmailsDropdown.value = true;
-  emit('searchContacts', { keys: ['email'], query: value });
+  emit('searchContacts', value);
 };
 
 const setSelectedContact = async ({ value, action, ...rest }) => {

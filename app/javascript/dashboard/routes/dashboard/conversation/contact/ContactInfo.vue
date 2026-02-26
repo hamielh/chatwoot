@@ -57,7 +57,6 @@ export default {
   data() {
     return {
       showEditModal: false,
-      showMergeModal: false,
       showDeleteModal: false,
     };
   },
@@ -94,10 +93,14 @@ export default {
         screen_name: twitterScreenName,
         social_telegram_user_name: telegramUsername,
       } = this.additionalAttributes;
+
+      const telegram = socialProfiles?.telegram || telegramUsername || '';
+      const twitter = socialProfiles?.twitter || twitterScreenName || '';
+
       return {
-        twitter: twitterScreenName,
-        telegram: telegramUsername,
         ...(socialProfiles || {}),
+        twitter,
+        telegram,
       };
     },
     // Delete Modal
@@ -186,11 +189,8 @@ export default {
         );
       }
     },
-    closeMergeModal() {
-      this.showMergeModal = false;
-    },
     openMergeModal() {
-      this.showMergeModal = true;
+      this.$refs.mergeModal?.open();
     },
   },
 };
@@ -355,12 +355,7 @@ export default {
         :contact="contact"
         @cancel="toggleEditModal"
       />
-      <ContactMergeModal
-        v-if="showMergeModal"
-        :primary-contact="contact"
-        :show="showMergeModal"
-        @close="closeMergeModal"
-      />
+      <ContactMergeModal ref="mergeModal" :primary-contact="contact" />
     </div>
     <woot-delete-modal
       v-if="showDeleteModal"
