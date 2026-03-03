@@ -141,7 +141,7 @@ export default {
           </div>
         </template>
       </SettingsFieldSection>
-      <SettingsSection
+      <SettingsFieldSection
         :title="$t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_TITLE')"
         :sub-title="$t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_DESC')"
       >
@@ -157,7 +157,7 @@ export default {
             {{ $t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_LABEL') }}
           </label>
         </div>
-      </SettingsSection>
+      </SettingsFieldSection>
     </form>
   </div>
 </template>

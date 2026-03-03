@@ -10,15 +10,44 @@ const { t } = useI18n();
 const { currentAccount, updateAccount } = useAccount();
 
 const SIDEBAR_SECTIONS = [
-  { key: 'conversation_actions', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONVERSATION_ACTIONS' },
-  { key: 'conversation_participants', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONVERSATION_PARTICIPANTS' },
-  { key: 'conversation_info', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONVERSATION_INFO' },
-  { key: 'contact_attributes', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONTACT_ATTRIBUTES' },
-  { key: 'previous_conversation', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.PREVIOUS_CONVERSATION' },
-  { key: 'macros', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.MACROS' },
-  { key: 'linear_issues', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.LINEAR_ISSUES' },
-  { key: 'shopify_orders', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.SHOPIFY_ORDERS' },
-  { key: 'contact_notes', label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONTACT_NOTES' },
+  {
+    key: 'conversation_actions',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONVERSATION_ACTIONS',
+  },
+  {
+    key: 'conversation_participants',
+    label:
+      'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONVERSATION_PARTICIPANTS',
+  },
+  {
+    key: 'conversation_info',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONVERSATION_INFO',
+  },
+  {
+    key: 'contact_attributes',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONTACT_ATTRIBUTES',
+  },
+  {
+    key: 'previous_conversation',
+    label:
+      'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.PREVIOUS_CONVERSATION',
+  },
+  {
+    key: 'macros',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.MACROS',
+  },
+  {
+    key: 'linear_issues',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.LINEAR_ISSUES',
+  },
+  {
+    key: 'shopify_orders',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.SHOPIFY_ORDERS',
+  },
+  {
+    key: 'contact_notes',
+    label: 'GENERAL_SETTINGS.FORM.SIDEBAR_CONFIG.SECTIONS.CONTACT_NOTES',
+  },
 ];
 
 const sectionStates = ref({});
@@ -28,15 +57,16 @@ watch(
   () => {
     const config = currentAccount.value?.settings?.sidebar_config || {};
     const states = {};
-    SIDEBAR_SECTIONS.forEach(({ key }) => {
-      states[key] = config[key] === undefined ? true : !!config[key];
+    SIDEBAR_SECTIONS.forEach(section => {
+      states[section.key] =
+        config[section.key] === undefined ? true : !!config[section.key];
     });
     sectionStates.value = states;
   },
   { deep: true, immediate: true }
 );
 
-const toggleSection = async key => {
+const toggleSection = async () => {
   const sidebarConfig = { ...sectionStates.value };
   try {
     await updateAccount({ sidebar_config: sidebarConfig });
