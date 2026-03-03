@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       selectedAgentBotId: null,
+      botEnabledDefault: true,
     };
   },
   computed: {
@@ -41,6 +42,14 @@ export default {
   watch: {
     activeAgentBot() {
       this.selectedAgentBotId = this.activeAgentBot.id;
+    },
+    inbox: {
+      handler(val) {
+        if (val) {
+          this.botEnabledDefault = val.bot_enabled_default ?? true;
+        }
+      },
+      immediate: true,
     },
   },
   mounted() {
@@ -77,6 +86,18 @@ export default {
           error?.message ||
             this.$t('AGENT_BOTS.BOT_CONFIGURATION.DISCONNECTED_ERROR_MESSAGE')
         );
+      }
+    },
+    async updateBotEnabledDefault() {
+      try {
+        await this.$store.dispatch('inboxes/updateInbox', {
+          id: this.inbox.id,
+          formData: false,
+          bot_enabled_default: this.botEnabledDefault,
+        });
+        useAlert(this.$t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_UPDATED'));
+      } catch (error) {
+        useAlert(this.$t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_UPDATE_ERROR'));
       }
     },
   },
@@ -120,6 +141,23 @@ export default {
           </div>
         </template>
       </SettingsFieldSection>
+      <SettingsSection
+        :title="$t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_TITLE')"
+        :sub-title="$t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_DESC')"
+      >
+        <div class="flex items-center gap-3">
+          <input
+            id="botEnabledDefault"
+            v-model="botEnabledDefault"
+            type="checkbox"
+            class="mt-0.5"
+            @change="updateBotEnabledDefault"
+          />
+          <label for="botEnabledDefault" class="mb-0 cursor-pointer">
+            {{ $t('AGENT_BOTS.BOT_CONFIGURATION.DEFAULT_LABEL') }}
+          </label>
+        </div>
+      </SettingsSection>
     </form>
   </div>
 </template>

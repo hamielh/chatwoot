@@ -49,6 +49,8 @@ class WhatsappApi::IncomingMessageService
   end
 
   def set_contact
+    resolved_source_id = resolve_source_id
+
     contact_attrs = {
       name: contact_name,
       additional_attributes: {
@@ -56,10 +58,10 @@ class WhatsappApi::IncomingMessageService
       }
     }
 
-    contact_attrs[:phone_number] = "+#{phone_number}" unless group_message?
+    contact_attrs[:phone_number] = "+#{resolved_source_id}" unless group_message?
 
     contact_inbox = ::ContactInboxWithContactBuilder.new(
-      source_id: phone_number,
+      source_id: resolved_source_id,
       inbox: inbox,
       contact_attributes: contact_attrs
     ).perform
@@ -197,6 +199,8 @@ class WhatsappApi::IncomingMessageService
   end
 
   def message_content
+    return '📷 Mensagem de visualização única' if view_once?
+
     content = message_params['text'] || message_params[:text] || ''
 
     content = "reagiu com #{content}" if is_reaction?
@@ -206,6 +210,11 @@ class WhatsappApi::IncomingMessageService
     else
       content
     end
+  end
+
+  def view_once?
+    type = message_params['type'] || message_params[:type]
+    type == 'view_once'
   end
 
   def is_reaction?
@@ -223,6 +232,36 @@ class WhatsappApi::IncomingMessageService
   def from_me?
     message_params['fromme'] == true || message_params[:fromme] == true ||
       message_params['fromMe'] == true || message_params[:fromMe] == true
+  end
+
+  # Resolve o source_id tentando achar um contact_inbox existente
+  # com a variante do nono dígito (com/sem o 9) para números brasileiros
+  def resolve_source_id
+    return phone_number if group_message?
+
+    # Busca direta pelo número que veio do QuePasa
+    return phone_number if inbox.contact_inboxes.exists?(source_id: phone_number)
+
+    # Tenta a variante do nono dígito para números BR
+    variant = brazilian_ninth_digit_variant(phone_number)
+    return variant if variant && inbox.contact_inboxes.exists?(source_id: variant)
+
+    phone_number
+  end
+
+  # Gera a variante com/sem nono dígito para números brasileiros
+  # 55 + DDD(2) + 9 + 8 dígitos = 13 dígitos (com 9) → remove o 9 → 12 dígitos
+  # 55 + DDD(2) + 8 dígitos = 12 dígitos (sem 9) → adiciona o 9 → 13 dígitos
+  def brazilian_ninth_digit_variant(number)
+    return unless number&.start_with?('55')
+
+    if number.length == 13 && number[4] == '9'
+      # Com nono dígito → gera sem
+      number[0..3] + number[5..]
+    elsif number.length == 12
+      # Sem nono dígito → gera com
+      "#{number[0..3]}9#{number[4..]}"
+    end
   end
 
   def group_message?

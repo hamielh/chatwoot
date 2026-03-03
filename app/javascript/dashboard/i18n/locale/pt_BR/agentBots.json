@@ -19,7 +19,12 @@
       "DISCONNECTED_SUCCESS_MESSAGE": "Bot desconectado com sucesso.",
       "ERROR_MESSAGE": "Não foi possível atualizar o agente robô. Por favor, tente novamente mais tarde.",
       "DISCONNECTED_ERROR_MESSAGE": "Não foi possível desconectar o agente robô. Por favor, tente novamente mais tarde.",
-      "SELECT_PLACEHOLDER": "Selecionar Robô"
+      "SELECT_PLACEHOLDER": "Selecionar Robô",
+      "DEFAULT_TITLE": "Bot ativo por padrão",
+      "DEFAULT_DESC": "Quando ativado, novas conversas nesta caixa de entrada iniciam com o bot ativo. Desative se quiser que as conversas iniciem sem interação do bot.",
+      "DEFAULT_LABEL": "Ativar bot para novas conversas",
+      "DEFAULT_UPDATED": "Configuração padrão do bot atualizada com sucesso.",
+      "DEFAULT_UPDATE_ERROR": "Não foi possível atualizar a configuração padrão do bot. Tente novamente."
     },
     "ADD": {
       "TITLE": "Criar Robô",

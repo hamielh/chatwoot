@@ -96,6 +96,25 @@
         "LABEL": "Exclude unattended conversations",
         "HELP": "When enabled, the system will skip resolving conversations that are still waiting for an agent's reply."
       },
+      "SIDEBAR_CONFIG": {
+        "TITLE": "Conversation Sidebar",
+        "NOTE": "Choose which sections are visible in the conversation sidebar for this account.",
+        "SECTIONS": {
+          "CONVERSATION_ACTIONS": "Conversation Actions",
+          "CONVERSATION_PARTICIPANTS": "Conversation Participants",
+          "CONVERSATION_INFO": "Conversation Info",
+          "CONTACT_ATTRIBUTES": "Contact Attributes",
+          "PREVIOUS_CONVERSATION": "Previous Conversations",
+          "MACROS": "Macros",
+          "LINEAR_ISSUES": "Linear Issues",
+          "SHOPIFY_ORDERS": "Shopify Orders",
+          "CONTACT_NOTES": "Contact Notes"
+        },
+        "API": {
+          "SUCCESS": "Sidebar settings updated successfully",
+          "ERROR": "Failed to update sidebar settings"
+        }
+      },
       "AUDIO_TRANSCRIPTION": {
         "TITLE": "Transcribe Audio Messages",
         "NOTE": "Automatically transcribe audio messages in conversations. Generate a text transcript whenever an audio message is sent or received, and display it alongside the message.",

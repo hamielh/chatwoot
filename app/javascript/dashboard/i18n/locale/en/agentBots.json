@@ -22,7 +22,12 @@
       "DISCONNECTED_SUCCESS_MESSAGE": "Successfully disconnected the agent bot.",
       "ERROR_MESSAGE": "Could not update the agent bot. Please try again.",
       "DISCONNECTED_ERROR_MESSAGE": "Could not disconnect the agent bot. Please try again.",
-      "SELECT_PLACEHOLDER": "Select bot"
+      "SELECT_PLACEHOLDER": "Select bot",
+      "DEFAULT_TITLE": "Bot enabled by default",
+      "DEFAULT_DESC": "When enabled, new conversations in this inbox will start with the bot active. Disable this if you want conversations to start without bot interaction.",
+      "DEFAULT_LABEL": "Enable bot for new conversations",
+      "DEFAULT_UPDATED": "Bot default setting updated successfully.",
+      "DEFAULT_UPDATE_ERROR": "Could not update bot default setting. Please try again."
     },
     "ADD": {
       "TITLE": "Add Bot",

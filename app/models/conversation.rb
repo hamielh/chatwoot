@@ -108,6 +108,7 @@ class Conversation < ApplicationRecord
 
   has_many :mentions, dependent: :destroy_async
   has_many :messages, dependent: :destroy_async, autosave: true
+  has_many :scheduled_messages, dependent: :destroy_async
   has_one :csat_survey_response, dependent: :destroy_async
   has_many :conversation_participants, dependent: :destroy_async
   has_many :notifications, as: :primary_actor, dependent: :destroy_async
@@ -116,6 +117,7 @@ class Conversation < ApplicationRecord
 
   before_save :ensure_snooze_until_reset
   before_create :determine_conversation_status
+  before_create :set_bot_enabled_from_inbox
   before_create :ensure_waiting_since
 
   after_update_commit :execute_after_update_commit_callbacks
@@ -263,6 +265,10 @@ class Conversation < ApplicationRecord
   def handle_campaign_status
     # If campaign has no sender (bot-initiated) and inbox has active bot, let bot handle it
     self.status = :pending if campaign.sender_id.nil? && inbox.active_bot?
+  end
+
+  def set_bot_enabled_from_inbox
+    self.bot_enabled = inbox.bot_enabled_default
   end
 
   def notify_conversation_creation

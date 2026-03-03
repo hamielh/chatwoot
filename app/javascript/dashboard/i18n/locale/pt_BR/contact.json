@@ -651,5 +651,33 @@
         "SEND": "Enviar ({keyCode})"
       }
     }
+  },
+  "SCHEDULED_MESSAGE": {
+    "TITLE": "Agendar Mensagem",
+    "SUBTITLE": "Agende uma mensagem para ser enviada.",
+    "BUTTON_TOOLTIP": "Agendar mensagem",
+    "FORM": {
+      "CONTENT_PLACEHOLDER": "Digite sua mensagem...",
+      "DATE_PLACEHOLDER": "Data e Hora",
+      "SCHEDULE": "Agendar",
+      "ATTACH": "Anexar arquivo",
+      "PRIVATE": "Nota privada"
+    },
+    "CREATE": {
+      "SUCCESS": "Mensagem agendada!",
+      "ERROR": "Erro ao agendar mensagem"
+    },
+    "CANCEL": {
+      "SUCCESS": "Agendamento cancelado",
+      "ERROR": "Erro ao cancelar agendamento",
+      "BUTTON": "Cancelar"
+    },
+    "LIST": {
+      "TITLE": "Mensagens Agendadas",
+      "ATTACHMENT_ONLY": "Somente anexo",
+      "FILE": "arquivo",
+      "FILES": "arquivos",
+      "PRIVATE": "Privada"
+    }
   }
 }

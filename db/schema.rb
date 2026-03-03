@@ -925,6 +925,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_26_084618) do
     t.integer "sender_name_type", default: 0, null: false
     t.string "business_name"
     t.jsonb "csat_config", default: {}, null: false
+    t.boolean "bot_enabled_default", default: true, null: false
     t.index ["account_id"], name: "index_inboxes_on_account_id"
     t.index ["channel_id", "channel_type"], name: "index_inboxes_on_channel_id_and_channel_type"
     t.index ["portal_id"], name: "index_inboxes_on_portal_id"
@@ -1170,6 +1171,23 @@ ActiveRecord::Schema[7.1].define(version: 2026_02_26_084618) do
     t.index ["inbox_id"], name: "index_reporting_events_on_inbox_id"
     t.index ["name"], name: "index_reporting_events_on_name"
     t.index ["user_id"], name: "index_reporting_events_on_user_id"
+  end
+
+  create_table "scheduled_messages", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "conversation_id", null: false
+    t.text "content"
+    t.datetime "scheduled_at", null: false
+    t.integer "status", default: 0, null: false
+    t.string "created_by_type", null: false
+    t.bigint "created_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "private", default: false, null: false
+    t.index ["account_id"], name: "index_scheduled_messages_on_account_id"
+    t.index ["conversation_id"], name: "index_scheduled_messages_on_conversation_id"
+    t.index ["created_by_type", "created_by_id"], name: "index_scheduled_messages_on_created_by"
+    t.index ["scheduled_at", "status"], name: "index_scheduled_messages_on_scheduled_at_and_status"
   end
 
   create_table "sidebar_apps", force: :cascade do |t|

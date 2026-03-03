@@ -45,28 +45,14 @@ const {
 const dragging = ref(false);
 const conversationSidebarItems = ref([]);
 
-const globalConfig = useMapGetter('globalConfig/get');
+const { currentAccount } = useAccount();
 
 const isSectionVisible = sectionName => {
-  const configMap = {
-    conversation_actions: 'SIDEBAR_CONVERSATION_ACTIONS',
-    conversation_participants: 'SIDEBAR_CONVERSATION_PARTICIPANTS',
-    conversation_info: 'SIDEBAR_CONVERSATION_INFO',
-    contact_attributes: 'SIDEBAR_CONTACT_ATTRIBUTES',
-    previous_conversation: 'SIDEBAR_PREVIOUS_CONVERSATION',
-    macros: 'SIDEBAR_MACROS',
-    linear_issues: 'SIDEBAR_LINEAR_ISSUES',
-    shopify_orders: 'SIDEBAR_SHOPIFY_ORDERS',
-    contact_notes: 'SIDEBAR_CONTACT_NOTES',
-  };
+  const sidebarConfig = currentAccount.value?.settings?.sidebar_config;
+  if (!sidebarConfig) return true;
 
-  const configKey = configMap[sectionName];
-  if (!configKey) return true;
-
-  const configValue = globalConfig.value[configKey];
-  return (
-    configValue === undefined || configValue === true || configValue === 'true'
-  );
+  const configValue = sidebarConfig[sectionName];
+  return configValue === undefined || configValue === true;
 };
 
 const shopifyIntegration = useFunctionGetter(

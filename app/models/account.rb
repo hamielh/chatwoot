@@ -68,6 +68,21 @@ class Account < ApplicationRecord
             'help_center_search': { 'type': %w[boolean null] }
           },
           'additionalProperties': false
+        },
+        'sidebar_config': {
+          'type': %w[object null],
+          'properties': {
+            'conversation_actions': { 'type': %w[boolean null] },
+            'conversation_participants': { 'type': %w[boolean null] },
+            'conversation_info': { 'type': %w[boolean null] },
+            'contact_attributes': { 'type': %w[boolean null] },
+            'previous_conversation': { 'type': %w[boolean null] },
+            'macros': { 'type': %w[boolean null] },
+            'linear_issues': { 'type': %w[boolean null] },
+            'shopify_orders': { 'type': %w[boolean null] },
+            'contact_notes': { 'type': %w[boolean null] }
+          },
+          'additionalProperties': false
         }
       },
     'required': [],

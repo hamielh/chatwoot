@@ -658,5 +658,33 @@
         "SEND": "Send ({keyCode})"
       }
     }
+  },
+  "SCHEDULED_MESSAGE": {
+    "TITLE": "Schedule Message",
+    "SUBTITLE": "Schedule a message to be sent later.",
+    "BUTTON_TOOLTIP": "Schedule message",
+    "FORM": {
+      "CONTENT_PLACEHOLDER": "Type your message...",
+      "DATE_PLACEHOLDER": "Date and Time",
+      "SCHEDULE": "Schedule",
+      "ATTACH": "Attach file",
+      "PRIVATE": "Private note"
+    },
+    "CREATE": {
+      "SUCCESS": "Message scheduled!",
+      "ERROR": "Error scheduling message"
+    },
+    "CANCEL": {
+      "SUCCESS": "Schedule cancelled",
+      "ERROR": "Error cancelling schedule",
+      "BUTTON": "Cancel"
+    },
+    "LIST": {
+      "TITLE": "Scheduled Messages",
+      "ATTACHMENT_ONLY": "Attachment only",
+      "FILE": "file",
+      "FILES": "files",
+      "PRIVATE": "Private"
+    }
   }
 }

@@ -34,6 +34,7 @@ import sidebarApps from './modules/sidebarApps';
 import chatAgents from './modules/chatAgents';
 import chatAgentUI from './modules/chatAgentUI';
 import draftMessages from './modules/draftMessages';
+import scheduledMessages from './modules/scheduledMessages';
 import globalConfig from 'shared/store/globalConfig';
 import inboxAssignableAgents from './modules/inboxAssignableAgents';
 import inboxes from './modules/inboxes';
@@ -100,6 +101,7 @@ export default createStore({
     chatAgents,
     chatAgentUI,
     draftMessages,
+    scheduledMessages,
     globalConfig,
     inboxAssignableAgents,
     inboxes,

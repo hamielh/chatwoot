@@ -25,6 +25,12 @@ class Webhooks::WhatsappApiEventsJob < ApplicationJob
       return
     end
 
+    # Ignorar contatos fantasma do sync (type=contact + edited=true = sempre fantasma)
+    if params['type'] == 'contact' && params['edited'] == true
+      Rails.logger.warn("WhatsappApiEventsJob - Ignoring phantom contact from sync (id: #{params['id']})")
+      return
+    end
+
     Rails.logger.info("WhatsappApiEventsJob - Processing message for inbox #{inbox.id}")
 
     # Processar mensagem
@@ -39,4 +45,6 @@ class Webhooks::WhatsappApiEventsJob < ApplicationJob
     Rails.logger.error(e.backtrace.join("\n"))
     raise
   end
+
+  private
 end

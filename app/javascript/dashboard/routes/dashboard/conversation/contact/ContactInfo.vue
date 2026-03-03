@@ -13,6 +13,7 @@ import { BUS_EVENTS } from 'shared/constants/busEvents';
 import NextButton from 'dashboard/components-next/button/Button.vue';
 import VoiceCallButton from 'dashboard/components-next/Contacts/VoiceCallButton.vue';
 import ToggleSwitch from 'dashboard/components-next/switch/Switch.vue';
+import ScheduleMessageModal from 'dashboard/components-next/ScheduleMessage/ScheduleMessageModal.vue';
 
 import {
   isAConversationRoute,
@@ -32,6 +33,7 @@ export default {
     ContactMergeModal,
     VoiceCallButton,
     ToggleSwitch,
+    ScheduleMessageModal,
   },
   props: {
     contact: {
@@ -321,6 +323,15 @@ export default {
           faded
         />
         <NextButton
+          v-if="conversationId"
+          v-tooltip.top-end="$t('SCHEDULED_MESSAGE.BUTTON_TOOLTIP')"
+          icon="i-lucide-calendar"
+          slate
+          faded
+          sm
+          @click="$refs.scheduleModal.open()"
+        />
+        <NextButton
           v-tooltip.top-end="$t('EDIT_CONTACT.BUTTON_LABEL')"
           icon="i-ph-pencil-simple"
           slate
@@ -357,6 +368,11 @@ export default {
       />
       <ContactMergeModal ref="mergeModal" :primary-contact="contact" />
     </div>
+    <ScheduleMessageModal
+      v-if="conversationId"
+      ref="scheduleModal"
+      :conversation-id="conversationId"
+    />
     <woot-delete-modal
       v-if="showDeleteModal"
       v-model:show="showDeleteModal"
